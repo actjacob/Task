@@ -34,3 +34,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+#realtimedatabase
+utils/firebaseHelper.js

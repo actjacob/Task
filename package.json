@@ -1,5 +1,5 @@
 {
-  "name": "testredux",
+  "name": "task",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -9,10 +9,21 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^7.2.0",
+    "@react-navigation/native": "^7.0.14",
+    "@react-navigation/native-stack": "^7.2.0",
+    "@reduxjs/toolkit": "^2.5.0",
     "expo": "~52.0.25",
     "expo-status-bar": "~2.0.1",
     "react": "18.3.1",
-    "react-native": "0.76.6"
+    "react-native": "0.76.6",
+    "react-native-gesture-handler": "^2.22.0",
+    "react-native-reanimated": "^3.16.6",
+    "react-native-safe-area-context": "^4.12.0",
+    "react-native-screens": "^4.5.0",
+    "react-native-vector-icons": "^10.2.0",
+    "react-redux": "^9.2.0",
+    "validate.js": "^0.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

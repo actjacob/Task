@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "TestRedux",
-    "slug": "TestRedux",
+    "name": "Task",
+    "slug": "Task",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
