@@ -33,17 +33,10 @@ const AuthScreen = (props) => {
             >
                <PageContainer style={styles.container}>
                   <View style={styles.imageContainer}>
-                     <Image
-                        style={styles.image}
-                        source={logo}
-                        resizeMode="contain"
-                     />
+                     <Image style={styles.image} source={logo} resizeMode="contain" />
                   </View>
                   {isSignUp ? <SignUpForm /> : <SignInForm />}
-                  <TouchableOpacity
-                     onPress={toggleForm}
-                     style={styles.linkContainer}
-                  >
+                  <TouchableOpacity onPress={toggleForm} style={styles.linkContainer}>
                      {/* <Text>
                   {isSignUp
                      ? 'Already have an account ? Sign In'
