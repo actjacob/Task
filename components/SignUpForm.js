@@ -8,7 +8,7 @@ import { reducer } from '../utils/reducers/formReducer';
 import { signUp } from '../utils/actions/authActions';
 import { ActivityIndicator, Alert } from 'react-native';
 import colors from '../constants/colors';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const initialState = {
    inputValues: {
@@ -28,6 +28,7 @@ const initialState = {
 
 const SignUpForm = (props) => {
    const dispatch = useDispatch();
+
    const [error, setError] = useState();
    const [isLoading, setIsLoading] = useState(false);
    const [formState, dispatchFormState] = useReducer(reducer, initialState);
