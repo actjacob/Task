@@ -35,7 +35,7 @@ const AuthScreen = (props) => {
                   <View style={styles.imageContainer}>
                      <Image style={styles.image} source={logo} resizeMode="contain" />
                   </View>
-                  {isSignUp ? <SignUpForm /> : <SignInForm />}
+                  {isSignUp ? <SignInForm /> : <SignUpForm />}
                   <TouchableOpacity onPress={toggleForm} style={styles.linkContainer}>
                      {/* <Text>
                   {isSignUp
@@ -43,7 +43,7 @@ const AuthScreen = (props) => {
                      : "Don't have an account? Sign Up"}
                </Text> */}
                      <Text style={styles.link}>
-                        {`Switch to ${isSignUp ? 'Sign In' : 'Sign Up'}`}{' '}
+                        {`Switch to ${isSignUp ? 'Sign Up' : 'Sign In'}`}{' '}
                      </Text>
                   </TouchableOpacity>
                </PageContainer>
