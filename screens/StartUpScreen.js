@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { setDidTryAutoLogin } from '../app/store/authSlice';
 
-const StartupScreen = () => {
+const StartUpScreen = () => {
    const dispatch = useDispatch();
    useEffect(() => {
       const tryLogin = async () => {
@@ -17,8 +17,8 @@ const StartupScreen = () => {
             return;
          }
 
-         const parseData = JSON.parse(storedAuthInfo);
-         const { token, userId, expiryDate: expiryDateString } = parseData;
+         const parsedData = JSON.parse(storedAuthInfo);
+         const { token, userId, expiryDate: expiryDateString } = parsedData;
 
          const expiryDate = new Date(expiryDateString);
          if (expiryDate <= new Date() || !token || userId) {
@@ -37,4 +37,4 @@ const StartupScreen = () => {
    );
 };
 
-export default StartupScreen;
+export default StartUpScreen;

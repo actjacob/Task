@@ -22,7 +22,6 @@ export const signUp = (firstName, lastName, email, password) => {
          saveDataToStorage(accessToken, uid, expiryDate);
       } catch (error) {
          console.log(error);
-
          const errorCode = error.code;
 
          let message = 'Something went wrong.';
@@ -30,6 +29,7 @@ export const signUp = (firstName, lastName, email, password) => {
          if (errorCode === 'auth/email-already-in-use') {
             message = 'This email is already in use';
          }
+
          throw new Error(message);
       }
    };
@@ -37,7 +37,6 @@ export const signUp = (firstName, lastName, email, password) => {
 
 const createUser = async (firstName, lastName, email, userId) => {
    const firstLast = `${firstName} ${lastName}`.toLowerCase();
-
    const userData = {
       firstName,
       lastName,
@@ -53,7 +52,7 @@ const createUser = async (firstName, lastName, email, userId) => {
    return userData;
 };
 
-const saveDataToStorage = (token, userData, expiryDate) => {
+const saveDataToStorage = (token, userId, expiryDate) => {
    AsyncStorage.setItem(
       'userData',
       JSON.stringify({
