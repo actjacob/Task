@@ -21,11 +21,7 @@ const Input = (props) => {
                />
             )}
 
-            <TextInput
-               {...props}
-               style={styles.input}
-               onChangeText={onChangeText}
-            />
+            <TextInput {...props} style={styles.input} onChangeText={onChangeText} />
          </View>
 
          {props.errorText && (
@@ -66,6 +62,7 @@ const styles = StyleSheet.create({
    input: {
       color: colors.textColor,
       flex: 1,
+      padding: 10,
       letterSpacing: 0.3,
    },
    errorContainer: {
