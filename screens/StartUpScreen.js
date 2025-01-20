@@ -4,10 +4,12 @@ import colors from '../constants/colors';
 import commonStyles from '../constants/commonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
-import { setDidTryAutoLogin } from '../app/store/authSlice';
+import { authenticate, setDidTryAutoLogin } from '../app/store/authSlice';
+import { getUserData } from '../utils/actions/userActions';
 
 const StartUpScreen = () => {
    const dispatch = useDispatch();
+
    useEffect(() => {
       const tryLogin = async () => {
          const storedAuthInfo = await AsyncStorage.getItem('userData');
@@ -21,10 +23,13 @@ const StartUpScreen = () => {
          const { token, userId, expiryDate: expiryDateString } = parsedData;
 
          const expiryDate = new Date(expiryDateString);
-         if (expiryDate <= new Date() || !token || userId) {
+         if (expiryDate <= new Date() || !token || !userId) {
             dispatch(setDidTryAutoLogin());
             return;
          }
+
+         const userData = await getUserData(userId);
+         dispatch(authenticate({ token: token, userData }));
       };
 
       tryLogin();
@@ -32,7 +37,7 @@ const StartUpScreen = () => {
 
    return (
       <View style={commonStyles.center}>
-         <ActivityIndicator size={'large'} color={colors.primary} />
+         <ActivityIndicator size="large" color={colors.primary} />
       </View>
    );
 };
