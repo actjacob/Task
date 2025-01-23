@@ -33,7 +33,7 @@ const StartUpScreen = () => {
       };
 
       tryLogin();
-   }, []);
+   }, [dispatch]);
 
    return (
       <View style={commonStyles.center}>

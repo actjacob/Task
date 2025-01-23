@@ -3,9 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import 'react-native-gesture-handler';
-
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AppNavigator from './navigation/AppNavigator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//AsyncStorage.clear();
 
 export default function App() {
    return (
