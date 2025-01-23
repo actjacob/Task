@@ -7,8 +7,9 @@ import SubmitButton from '../components/SubmitButton';
 import { validateInput } from '../utils/actions/formActions';
 import { reducer } from '../utils/reducers/formReducer';
 import { signIn } from '../utils/actions/authActions';
-import { Alert } from 'react-native';
+import { ActivityIndicator, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
+import { validateEmail } from '../utils/validationConstraints';
 
 const initialState = {
    inputValues: {
@@ -47,9 +48,33 @@ const SignInForm = (props) => {
       }
    }, [error]);
 
+   // const authHandler = useCallback(async () => {
+   //    try {
+   //       setIsLoading(true);
+   //       const action = signIn(
+   //          formState.inputValues.email,
+   //          formState.inputValues.password
+   //       );
+   //       dispatch(action);
+   //       setError(null);
+   //    } catch (error) {
+   //       setError(error.message);
+   //       setIsLoading(false);
+   //    }
+   // }, [dispatch]);
    const authHandler = useCallback(async () => {
       try {
          setIsLoading(true);
+
+         // E-posta doğrulaması
+         const emailValidationError = validateEmail('email', formState.inputValues.email);
+         if (emailValidationError) {
+            setError(emailValidationError);
+            setIsLoading(false);
+            return;
+         }
+
+         // E-posta geçerli, işlem yapılabilir
          const action = signIn(
             formState.inputValues.email,
             formState.inputValues.password
@@ -60,7 +85,7 @@ const SignInForm = (props) => {
          setError(error.message);
          setIsLoading(false);
       }
-   }, [dispatch]);
+   }, [dispatch, formState.inputValues.email, formState.inputValues.password]);
 
    return (
       <>
@@ -84,12 +109,27 @@ const SignInForm = (props) => {
             onInputChanged={inputChangedHandler}
             errorText={formState.inputValidities['password']}
          />
-         <SubmitButton
+         {/* <SubmitButton
             title="Sign in"
             onPress={authHandler}
             style={{ marginTop: 30 }}
             disabled={!formState.formIsValid}
-         />
+         /> */}
+
+         {isLoading ? (
+            <ActivityIndicator
+               size={'small'}
+               color={colors.primary}
+               style={{ marginTop: 10 }}
+            />
+         ) : (
+            <SubmitButton
+               title="Sign in"
+               onPress={authHandler}
+               style={{ marginTop: 20 }}
+               disabled={!formState.formIsValid}
+            />
+         )}
       </>
    );
 };

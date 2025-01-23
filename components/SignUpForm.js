@@ -9,6 +9,7 @@ import { signUp } from '../utils/actions/authActions';
 import { ActivityIndicator, Alert } from 'react-native';
 import colors from '../constants/colors';
 import { useDispatch, useSelector } from 'react-redux';
+import { validateEmail } from '../utils/validationConstraints';
 
 const initialState = {
    inputValues: {
@@ -47,9 +48,35 @@ const SignUpForm = (props) => {
       }
    }, [error]);
 
-   const authHandler = async () => {
+   // const authHandler = async () => {
+   //    try {
+   //       setIsLoading(true);
+   //       const action = signUp(
+   //          formState.inputValues.firstName,
+   //          formState.inputValues.lastName,
+   //          formState.inputValues.email,
+   //          formState.inputValues.password
+   //       );
+   //       dispatch(action);
+   //       setError(null);
+   //    } catch (error) {
+   //       setError(error.message);
+   //       setIsLoading(false);
+   //    }
+   // };
+   const authHandler = useCallback(async () => {
       try {
          setIsLoading(true);
+
+         // E-posta doğrulaması
+         const emailValidationError = validateEmail('email', formState.inputValues.email);
+         if (emailValidationError) {
+            setError(emailValidationError);
+            setIsLoading(false);
+            return;
+         }
+
+         // E-posta geçerli, işlem yapılabilir
          const action = signUp(
             formState.inputValues.firstName,
             formState.inputValues.lastName,
@@ -62,7 +89,52 @@ const SignUpForm = (props) => {
          setError(error.message);
          setIsLoading(false);
       }
-   };
+   }, [
+      dispatch,
+      formState.inputValues.email,
+      formState.inputValues.password,
+      formState.inputValues.firstName,
+      formState.inputValues.lastName,
+   ]);
+
+   // const authHandler = useCallback(async () => {
+   //    try {
+   //       setIsLoading(true);
+
+   //       // E-posta doğrulaması
+   //       if (!formState.inputValues.email || formState.inputValues.email.trim() === '') {
+   //          setError('Email cannot be empty');
+   //          setIsLoading(false);
+   //          return;
+   //       }
+
+   //       const emailIsValid = formState.inputValidities.email;
+   //       if (!emailIsValid) {
+   //          setError('Invalid email address');
+   //          setIsLoading(false);
+   //          return;
+   //       }
+
+   //       // Eğer e-posta geçerliyse, signUp işlemine devam et
+   //       const action = signUp(
+   //          formState.inputValues.firstName,
+   //          formState.inputValues.lastName,
+   //          formState.inputValues.email,
+   //          formState.inputValues.password
+   //       );
+   //       dispatch(action);
+   //       setError(null);
+   //    } catch (error) {
+   //       setError(error.message);
+   //       setIsLoading(false);
+   //    }
+   // }, [
+   //    dispatch,
+   //    formState.inputValues.email,
+   //    formState.inputValues.password,
+   //    formState.inputValues.firstName,
+   //    formState.inputValues.lastName,
+   // ]);
 
    return (
       <>

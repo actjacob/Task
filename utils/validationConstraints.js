@@ -22,9 +22,10 @@ export const validateEmail = (id, value) => {
    const constraints = {
       presence: { allowEmpty: false },
    };
-
-   if (value !== '') {
-      constraints.email = true;
+   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+   if (value !== '' && !emailPattern.test(value)) {
+      return 'Invalid email format';
+      // constraints.email = true;
    }
 
    const validationResult = validate({ [id]: value }, { [id]: constraints });
