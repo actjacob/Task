@@ -11,16 +11,20 @@ import { ActivityIndicator, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { validateEmail } from '../utils/validationConstraints';
 
+const isTestMode = true;
+
 const initialState = {
    inputValues: {
-      email: '',
-      password: '',
+      email: isTestMode ? 'yakupaktat@gmail.com' : '',
+      password: isTestMode ? '123456' : '',
    },
    inputValidities: {
+      // email: isTestMode,
+      // password: isTestMode,
       email: false,
       password: false,
    },
-   formIsValid: false,
+   formIsValid: isTestMode ? true : false,
 };
 
 const SignInForm = (props) => {
@@ -73,6 +77,7 @@ const SignInForm = (props) => {
             autoCapitalize="none"
             keyboardType="email-address"
             onInputChanged={inputChangedHandler}
+            value={formState.inputValues.email}
             errorText={formState.inputValidities['email']}
          />
          <Input
@@ -83,6 +88,7 @@ const SignInForm = (props) => {
             autoCapitalize="none"
             secureTextEntry
             onInputChanged={inputChangedHandler}
+            value={formState.inputValues.password}
             errorText={formState.inputValidities['password']}
          />
          {/* <SubmitButton

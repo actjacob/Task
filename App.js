@@ -7,7 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AppNavigator from './navigation/AppNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// AsyncStorage.clear();
+//AsyncStorage.clear();
 
 export default function App() {
    return (
