@@ -17,7 +17,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const boards = [
    { id: '1', name: 'Jacob', color: 'purple' },
-   { id: '2', name: 'Elena', color: 'blue' },
+   { id: '2', name: 'Sedef', color: 'blue' },
 ];
 
 const BoardScreen = (props) => {
@@ -30,15 +30,8 @@ const BoardScreen = (props) => {
          {/* Header */}
          <View style={styles.header}>
             <Text style={styles.headerText}>İş Takip</Text>
-            <TouchableOpacity
-               style={styles.addIcon}
-               onPress={() => setMenuVisible(true)}
-            >
-               <Ionicons
-                  name="add"
-                  size={24}
-                  color="white"
-               />
+            <TouchableOpacity style={styles.addIcon} onPress={() => setMenuVisible(true)}>
+               <Ionicons name="add" size={24} color="white" />
             </TouchableOpacity>
          </View>
 
@@ -48,9 +41,7 @@ const BoardScreen = (props) => {
             data={boards}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-               <View
-                  style={[styles.boardItem, { backgroundColor: item.color }]}
-               >
+               <View style={[styles.boardItem, { backgroundColor: item.color }]}>
                   <Text style={styles.boardText}> {item.name} </Text>
                </View>
             )}
@@ -64,33 +55,21 @@ const BoardScreen = (props) => {
                   onPress={() => setMenuVisible(false)}
                >
                   <Text style={styles.menuText}> Create a board </Text>
-                  <Feather
-                     name="columns"
-                     size={24}
-                     color="black"
-                  />
+                  <Feather name="columns" size={24} color="black" />
                </TouchableOpacity>
                <TouchableOpacity
                   style={styles.menuItem}
                   onPress={() => setMenuVisible(false)}
                >
                   <Text style={styles.menuText}> Create a card </Text>
-                  <MaterialIcons
-                     name="credit-card"
-                     size={24}
-                     color="black"
-                  />
+                  <MaterialIcons name="credit-card" size={24} color="black" />
                </TouchableOpacity>
                <TouchableOpacity
                   style={styles.menuItem}
                   onPress={() => setMenuVisible(false)}
                >
                   <Text style={styles.menuText}> Browse Templates </Text>
-                  <Ionicons
-                     name="copy-outline"
-                     size={24}
-                     color="black"
-                  />
+                  <Ionicons name="copy-outline" size={24} color="black" />
                </TouchableOpacity>
             </View>
          )}

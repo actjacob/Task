@@ -18,20 +18,19 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = (props) => {
    return (
-      <Tab.Navigator>
+      <Tab.Navigator
+         screenOptions={{
+            headerTitle: '',
+            headerShadowVisible: false,
+         }}
+      >
          <Tab.Screen
             name="Board"
             component={BoardScreen}
             options={{
                headerShown: false,
                tabBarIcon: ({ color, size }) => {
-                  return (
-                     <FontAwesome5
-                        name="trello"
-                        size={size}
-                        color={color}
-                     />
-                  );
+                  return <FontAwesome5 name="trello" size={size} color={color} />;
                },
             }}
          />
@@ -57,13 +56,7 @@ const TabNavigator = (props) => {
             component={SearchScreen}
             options={{
                tabBarIcon: ({ color, size }) => {
-                  return (
-                     <FontAwesome5
-                        name="search"
-                        size={size}
-                        color={color}
-                     />
-                  );
+                  return <FontAwesome5 name="search" size={size} color={color} />;
                },
             }}
          />
@@ -72,13 +65,7 @@ const TabNavigator = (props) => {
             component={Notifications}
             options={{
                tabBarIcon: ({ color, size }) => {
-                  return (
-                     <Ionicons
-                        name="notifications"
-                        size={size}
-                        color={color}
-                     />
-                  );
+                  return <Ionicons name="notifications" size={size} color={color} />;
                },
             }}
          />
@@ -88,11 +75,7 @@ const TabNavigator = (props) => {
             options={{
                tabBarIcon: ({ color, size }) => {
                   return (
-                     <Ionicons
-                        name="person-circle-outline"
-                        size={size}
-                        color={color}
-                     />
+                     <Ionicons name="person-circle-outline" size={size} color={color} />
                   );
                },
             }}
