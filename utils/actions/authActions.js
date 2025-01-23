@@ -59,11 +59,17 @@ export const signIn = (email, password) => {
       } catch (error) {
          console.log(error);
          const errorCode = error.code;
+         console.log(errorCode);
 
          let message = 'Something went wrong.';
 
-         if (errorCode === 'auth/email-already-in-use') {
-            message = 'This email is already in use';
+         if (
+            errorCode === '(auth/invalid-credential)' ||
+            errorCode === 'auth/invalid-credential' ||
+            errorCode === 'auth/wrong-password' ||
+            errorCode === 'auth/user-not-found'
+         ) {
+            message = 'The username or password  was incorrect';
          }
 
          throw new Error(message);

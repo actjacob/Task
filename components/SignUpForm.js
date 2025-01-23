@@ -48,9 +48,36 @@ const SignUpForm = (props) => {
       }
    }, [error]);
 
-   // const authHandler = async () => {
+   const authHandler = useCallback(async () => {
+      try {
+         setIsLoading(true);
+         const action = signUp(
+            formState.inputValues.firstName,
+            formState.inputValues.lastName,
+            formState.inputValues.email,
+            formState.inputValues.password
+         );
+         setError(null);
+         await dispatch(action);
+      } catch (error) {
+         setError(error.message);
+         setIsLoading(false);
+      }
+   }, [dispatch, formState]);
+
+   // const authHandler = useCallback(async () => {
    //    try {
    //       setIsLoading(true);
+
+   //       E-posta doğrulaması
+   //       const emailValidationError = validateEmail('email', formState.inputValues.email);
+   //       if (emailValidationError) {
+   //          setError(emailValidationError);
+   //          setIsLoading(false);
+   //          return;
+   //       }
+
+   //       E-posta geçerli, işlem yapılabilir
    //       const action = signUp(
    //          formState.inputValues.firstName,
    //          formState.inputValues.lastName,
@@ -63,39 +90,13 @@ const SignUpForm = (props) => {
    //       setError(error.message);
    //       setIsLoading(false);
    //    }
-   // };
-   const authHandler = useCallback(async () => {
-      try {
-         setIsLoading(true);
-
-         // E-posta doğrulaması
-         const emailValidationError = validateEmail('email', formState.inputValues.email);
-         if (emailValidationError) {
-            setError(emailValidationError);
-            setIsLoading(false);
-            return;
-         }
-
-         // E-posta geçerli, işlem yapılabilir
-         const action = signUp(
-            formState.inputValues.firstName,
-            formState.inputValues.lastName,
-            formState.inputValues.email,
-            formState.inputValues.password
-         );
-         dispatch(action);
-         setError(null);
-      } catch (error) {
-         setError(error.message);
-         setIsLoading(false);
-      }
-   }, [
-      dispatch,
-      formState.inputValues.email,
-      formState.inputValues.password,
-      formState.inputValues.firstName,
-      formState.inputValues.lastName,
-   ]);
+   // }, [
+   //    dispatch,
+   //    formState.inputValues.email,
+   //    formState.inputValues.password,
+   //    formState.inputValues.firstName,
+   //    formState.inputValues.lastName,
+   // ]);
 
    // const authHandler = useCallback(async () => {
    //    try {
