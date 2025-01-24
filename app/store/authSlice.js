@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { updateSignedInUserData } from '../../utils/actions/authActions';
 
 const initialState = {
    token: null,
@@ -24,10 +25,14 @@ const authSlice = createSlice({
          state.userData = null;
          state.didTryAutoLogin = false;
       },
+      updateLoggedInUserData: (state, action) => {
+         state.userData = { ...state.userData, ...action.payload.newData };
+      },
    },
 });
 
 export const setDidTryAutoLogin = authSlice.actions.setDidTryAutoLogin;
 export const authenticate = authSlice.actions.authenticate;
+export const updateLoggedInUserData = authSlice.actions.updateLoggedInUserData;
 export const logout = authSlice.actions.logout;
 export const authReducer = authSlice.reducer;

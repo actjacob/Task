@@ -11,18 +11,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import SubmitButton from '../components/SubmitButton';
 import colors from '../constants/colors';
 import { updateSignedInUserData, userLogout } from '../utils/actions/authActions';
+import { updateLoggedInUserData } from '../app/store/authSlice';
 
 const AccountScreen = (props) => {
    const dispatch = useDispatch();
    const [isLoading, setIsLoading] = useState(false);
+   const [showSuccesMessage, setShowSuccesMessage] = useState(false);
    const userData = useSelector((state) => state.auth?.userData);
+
+   const firstName = userData?.firstName || '';
+   const lastName = userData?.lastName || '';
+   const email = userData?.email || '';
+   const about = userData?.about || '';
 
    const initialState = {
       inputValues: {
-         firstName: userData.firstName || '',
-         lastName: userData.lastName || '',
-         email: userData.email || '',
-         about: userData.about || '',
+         firstName,
+         lastName,
+         email,
+         about,
       },
       inputValidities: {
          firstName: undefined,
@@ -39,21 +46,38 @@ const AccountScreen = (props) => {
       (inputId, inputValue) => {
          const result = validateInput(inputId, inputValue);
          dispatchFormState({ inputId, validationResult: result, inputValue });
+         setShowSuccesMessage(true);
+
+         setTimeout(() => {
+            setShowSuccesMessage(false);
+         }, 3000);
       },
       [dispatchFormState]
    );
 
-   const saveHandler = async () => {
+   const saveHandler = useCallback(async () => {
       const updatedValues = formState.inputValues;
 
       try {
          setIsLoading(true);
          await updateSignedInUserData(userData.userId, updatedValues);
+         dispatch(updateLoggedInUserData({ newData: updatedValues }));
       } catch (error) {
          console.log(error);
       } finally {
          setIsLoading(false);
       }
+   }, [formState, dispatch]);
+
+   const hasChanges = () => {
+      const currentValues = formState.inputValues;
+
+      return (
+         currentValues.firstName != firstName ||
+         currentValues.lastName != lastName ||
+         currentValues.email != email ||
+         currentValues.about != about
+      );
    };
 
    return (
@@ -104,20 +128,27 @@ const AccountScreen = (props) => {
             errorText={formState.inputValidities['about']}
             initialValue={userData.about}
          />
-         {isLoading ? (
-            <ActivityIndicator
-               size={'small'}
-               color={colors.primary}
-               style={{ marginTop: 10 }}
-            />
-         ) : (
-            <SubmitButton
-               title="Save"
-               onPress={saveHandler}
-               style={{ marginTop: 30 }}
-               disabled={!formState.formIsValid}
-            />
-         )}
+
+         <View style={{ marginTop: 20 }}>
+            {showSuccesMessage && <Text>Saved!</Text>}
+
+            {isLoading ? (
+               <ActivityIndicator
+                  size={'small'}
+                  color={colors.primary}
+                  style={{ marginTop: 10 }}
+               />
+            ) : (
+               hasChanges() && (
+                  <SubmitButton
+                     title="Save"
+                     onPress={saveHandler}
+                     style={{ marginTop: 30 }}
+                     disabled={!formState.formIsValid}
+                  />
+               )
+            )}
+         </View>
          <SubmitButton
             title="Logout"
             onPress={() => dispatch(userLogout())}
