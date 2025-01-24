@@ -17,7 +17,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const boards = [
    { id: '1', name: 'Jacob', color: 'purple' },
-   { id: '2', name: 'Sedef', color: 'blue' },
+   { id: '2', name: 'Jacob', color: 'blue' },
 ];
 
 const BoardScreen = (props) => {

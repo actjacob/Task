@@ -19,6 +19,8 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = (props) => {
    return (
       <Tab.Navigator
+         initialRouteName="Board"
+         component={BoardScreen}
          screenOptions={{
             headerTitle: '',
             headerShadowVisible: false,
