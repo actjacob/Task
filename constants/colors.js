@@ -6,4 +6,5 @@ export default {
    textColor: '#1c1d21',
    primary: '#32d48e',
    purple: '#634eb5',
+   red: '#e74c3c',
 };
