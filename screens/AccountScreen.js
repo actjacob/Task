@@ -1,5 +1,13 @@
 import React, { useCallback, useReducer, useState } from 'react';
-import { StyleSheet, View, Text, Button, Alert, ActivityIndicator } from 'react-native';
+import {
+   StyleSheet,
+   View,
+   Text,
+   Button,
+   Alert,
+   ActivityIndicator,
+   ScrollView,
+} from 'react-native';
 
 import PageContainer from '../components/PageContainer';
 import PageTitle from '../components/PageTitle';
@@ -12,6 +20,7 @@ import SubmitButton from '../components/SubmitButton';
 import colors from '../constants/colors';
 import { updateSignedInUserData, userLogout } from '../utils/actions/authActions';
 import { updateLoggedInUserData } from '../app/store/authSlice';
+import ProfileImage from '../components/ProfileImage';
 
 const AccountScreen = (props) => {
    const dispatch = useDispatch();
@@ -83,78 +92,81 @@ const AccountScreen = (props) => {
    return (
       <PageContainer>
          <PageTitle text="Account" />
+         <ScrollView>
+            <ProfileImage />
 
-         <Input
-            id="firstName"
-            label="First name"
-            icon="user-o"
-            iconPack={FontAwesome}
-            onInputChanged={inputChangedHandler}
-            autoCapitalize="none"
-            errorText={formState.inputValidities['firstName']}
-            initialValue={userData.firstName}
-         />
+            <Input
+               id="firstName"
+               label="First name"
+               icon="user-o"
+               iconPack={FontAwesome}
+               onInputChanged={inputChangedHandler}
+               autoCapitalize="none"
+               errorText={formState.inputValidities['firstName']}
+               initialValue={userData.firstName}
+            />
 
-         <Input
-            id="lastName"
-            label="Last name"
-            icon="user-o"
-            iconPack={FontAwesome}
-            onInputChanged={inputChangedHandler}
-            autoCapitalize="none"
-            errorText={formState.inputValidities['lastName']}
-            initialValue={userData.lastName}
-         />
+            <Input
+               id="lastName"
+               label="Last name"
+               icon="user-o"
+               iconPack={FontAwesome}
+               onInputChanged={inputChangedHandler}
+               autoCapitalize="none"
+               errorText={formState.inputValidities['lastName']}
+               initialValue={userData.lastName}
+            />
 
-         <Input
-            id="email"
-            label="Email"
-            icon="mail"
-            iconPack={Feather}
-            onInputChanged={inputChangedHandler}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            errorText={formState.inputValidities['email']}
-            initialValue={userData.email}
-         />
+            <Input
+               id="email"
+               label="Email"
+               icon="mail"
+               iconPack={Feather}
+               onInputChanged={inputChangedHandler}
+               keyboardType="email-address"
+               autoCapitalize="none"
+               errorText={formState.inputValidities['email']}
+               initialValue={userData.email}
+            />
 
-         <Input
-            id="about"
-            label="About"
-            icon="user-o"
-            iconPack={FontAwesome}
-            onInputChanged={inputChangedHandler}
-            autoCapitalize="none"
-            errorText={formState.inputValidities['about']}
-            initialValue={userData.about}
-         />
+            <Input
+               id="about"
+               label="About"
+               icon="user-o"
+               iconPack={FontAwesome}
+               onInputChanged={inputChangedHandler}
+               autoCapitalize="none"
+               errorText={formState.inputValidities['about']}
+               initialValue={userData.about}
+            />
 
-         <View style={{ marginTop: 20 }}>
-            {showSuccesMessage && <Text>Saved!</Text>}
+            <View style={{ marginTop: 20 }}>
+               {showSuccesMessage && <Text>Saved!</Text>}
 
-            {isLoading ? (
-               <ActivityIndicator
-                  size={'small'}
-                  color={colors.primary}
-                  style={{ marginTop: 10 }}
-               />
-            ) : (
-               hasChanges() && (
-                  <SubmitButton
-                     title="Save"
-                     onPress={saveHandler}
-                     style={{ marginTop: 30 }}
-                     disabled={!formState.formIsValid}
+               {isLoading ? (
+                  <ActivityIndicator
+                     size={'small'}
+                     color={colors.primary}
+                     style={{ marginTop: 10 }}
                   />
-               )
-            )}
-         </View>
-         <SubmitButton
-            title="Logout"
-            onPress={() => dispatch(userLogout())}
-            style={{ marginTop: 30 }}
-            color={colors.red}
-         />
+               ) : (
+                  hasChanges() && (
+                     <SubmitButton
+                        title="Save"
+                        onPress={saveHandler}
+                        style={{ marginTop: 30 }}
+                        disabled={!formState.formIsValid}
+                     />
+                  )
+               )}
+            </View>
+            <SubmitButton
+               title="Logout"
+               onPress={() => dispatch(userLogout())}
+               style={{ marginTop: 30 }}
+               color={colors.red}
+            />
+         </ScrollView>
       </PageContainer>
    );
 };
