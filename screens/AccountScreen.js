@@ -92,8 +92,8 @@ const AccountScreen = (props) => {
    return (
       <PageContainer>
          <PageTitle text="Account" />
-         <ScrollView>
-            <ProfileImage />
+         <ScrollView contentContainerStyle={styles.formConatiner}>
+            <ProfileImage size={100} />
 
             <Input
                id="firstName"
@@ -179,5 +179,8 @@ const styles = StyleSheet.create({
    },
    text: {
       fontSize: 24,
+   },
+   formConatiner: {
+      alignItems: 'center',
    },
 });
