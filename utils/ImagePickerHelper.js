@@ -5,14 +5,17 @@ export const launchImagePicker = async () => {
    await checkMediaPermissions();
 
    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
    });
 
-   if (!result.canceled) {
-      console.log(result.uri);
+   //  if (!result.canceled) {
+   //     return result.uri;
+   //  }sdk49 sonrası güncelleme
+   if (!result.canceled && result.assets.length > 0) {
+      return result.assets[0].uri;
    }
 };
 
