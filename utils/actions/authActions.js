@@ -100,8 +100,10 @@ export const userLogout = () => {
 };
 
 export const updateSignedInUserData = async (userId, newData) => {
-   const firstLast = `${newData.firstName} ${newData.lastName}`.toLowerCase();
-   newData.firstLast = firstLast;
+   if (newData.firstName && newData.lastName) {
+      const firstLast = `${newData.firstName} ${newData.lastName}`.toLowerCase();
+      newData.firstLast = firstLast;
+   }
 
    const dbRef = ref(getDatabase());
    const childRef = child(dbRef, `users/${userId}`);
@@ -116,6 +118,7 @@ const createUser = async (firstName, lastName, email, userId) => {
       lastName,
       firstLast,
       email,
+      profilePicture,
       userId,
       signUpDate: new Date().toISOString(),
    };

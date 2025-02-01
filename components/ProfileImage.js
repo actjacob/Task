@@ -6,11 +6,14 @@ import profilePicture from '../assets/profilephoto.jpg';
 import userImage from '../assets/userImage.jpeg';
 import colors from '../constants/colors';
 import { launchImagePicker, uploadImagePicker } from '../utils/ImagePickerHelper';
+import { updateSignedInUserData } from '../utils/actions/authActions';
 
 const ProfileImage = (props) => {
    const source = props.uri ? { uri: props.uri } : userImage;
 
    const [image, setImage] = useState(source);
+
+   const userId = props.userId;
 
    const pickImage = async () => {
       try {
@@ -25,9 +28,11 @@ const ProfileImage = (props) => {
             throw new Error('Could not upload image');
          }
 
+         await updateSignedInUserData(userId, { profilePicture: uploadUrl });
+
          setImage({ uri: uploadUrl });
       } catch (error) {
-         console.log(error);
+         console.log('Selam Buradaki hata:', error);
       }
    };
 

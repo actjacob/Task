@@ -93,7 +93,11 @@ const AccountScreen = (props) => {
       <PageContainer>
          <PageTitle text="Account" />
          <ScrollView contentContainerStyle={styles.formConatiner}>
-            <ProfileImage size={100} />
+            <ProfileImage
+               size={100}
+               userId={userData.userId}
+               uri={userData.profilePicture}
+            />
 
             <Input
                id="firstName"
