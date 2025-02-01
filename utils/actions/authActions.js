@@ -11,8 +11,9 @@ import { getUserData } from './userActions';
 
 let timer;
 
-export const signUp = (firstName, lastName, email, password) => {
+export const signUp = (firstName, lastName, email, password, role) => {
    return async (dispatch) => {
+      console.log('signUp fonksiyonuna gelen rol:', role);
       const app = getFirebaseApp();
       const auth = getAuth(app);
 
@@ -25,7 +26,7 @@ export const signUp = (firstName, lastName, email, password) => {
          const timeNow = new Date();
          const millisecondsUntilExpiry = expiryDate - timeNow;
 
-         const userData = await createUser(firstName, lastName, email, uid);
+         const userData = await createUser(firstName, lastName, email, uid, role);
 
          dispatch(authenticate({ token: accessToken, userData }));
          saveDataToStorage(accessToken, uid, expiryDate);
@@ -110,7 +111,8 @@ export const updateSignedInUserData = async (userId, newData) => {
    await update(childRef, newData);
 };
 
-const createUser = async (firstName, lastName, email, userId) => {
+const createUser = async (firstName, lastName, email, userId, role) => {
+   console.log("Firebase'e kaydedilecek rol:", role);
    const firstLast = `${firstName} ${lastName}`.toLowerCase();
 
    const userData = {
@@ -118,8 +120,8 @@ const createUser = async (firstName, lastName, email, userId) => {
       lastName,
       firstLast,
       email,
-      profilePicture,
       userId,
+      role,
       signUpDate: new Date().toISOString(),
    };
 

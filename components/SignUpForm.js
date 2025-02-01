@@ -5,7 +5,7 @@ import { Feather, FontAwesome } from '@expo/vector-icons';
 import { validateInput } from '../utils/actions/formActions';
 import { reducer } from '../utils/reducers/formReducer';
 import { signUp } from '../utils/actions/authActions';
-import { ActivityIndicator, Alert } from 'react-native';
+import { ActivityIndicator, Alert, View, Text, Switch } from 'react-native';
 import colors from '../constants/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { validateEmail } from '../utils/validationConstraints';
@@ -32,6 +32,7 @@ const SignUpForm = (props) => {
    const [error, setError] = useState();
    const [isLoading, setIsLoading] = useState(false);
    const [formState, dispatchFormState] = useReducer(reducer, initialState);
+   const [isAdmin, setIsAdmin] = useState(false);
 
    const inputChangedHandler = useCallback(
       (inputId, inputValue) => {
@@ -54,7 +55,8 @@ const SignUpForm = (props) => {
             formState.inputValues.firstName,
             formState.inputValues.lastName,
             formState.inputValues.email,
-            formState.inputValues.password
+            formState.inputValues.password,
+            isAdmin ? 'admin' : 'staff'
          );
          setError(null);
          await dispatch(action);
@@ -62,7 +64,7 @@ const SignUpForm = (props) => {
          setError(error.message);
          setIsLoading(false);
       }
-   }, [dispatch, formState]);
+   }, [dispatch, formState, isAdmin]);
 
    return (
       <>
@@ -107,6 +109,13 @@ const SignUpForm = (props) => {
             onInputChanged={inputChangedHandler}
             errorText={formState.inputValidities['password']}
          />
+
+         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
+            <Text style={{ color: colors.nearlyWhite, fontSize: 16 }}>
+               Admin Olarak Kaydol
+            </Text>
+            <Switch value={isAdmin} onValueChange={setIsAdmin} />
+         </View>
 
          {isLoading ? (
             <ActivityIndicator
