@@ -1,6 +1,9 @@
 import * as ImagePicker from 'expo-image-picker';
 import { Platform } from 'react-native';
 import { getFirebaseApp } from './firebaseHelper';
+import uuid from 'react-native-uuid';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import react from 'react';
 
 export const launchImagePicker = async () => {
    await checkMediaPermissions();
@@ -37,6 +40,15 @@ export const uploadImagePicker = async (uri) => {
       xhr.open('GET', uri, true);
       xhr.send(null);
    });
+
+   const pathFolder = 'profilePics';
+   const storageRef = ref(getStorage(app), `${pathFolder}/${uuid.v4()}`);
+
+   await uploadBytesResumable(storageRef, blob);
+
+   blob.close();
+
+   return await getDownloadURL(storageRef);
 };
 
 const checkMediaPermissions = async () => {
