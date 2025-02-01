@@ -21,12 +21,14 @@ import colors from '../constants/colors';
 import { updateSignedInUserData, userLogout } from '../utils/actions/authActions';
 import { updateLoggedInUserData } from '../app/store/authSlice';
 import ProfileImage from '../components/ProfileImage';
+import userImage from '../assets/userImage.jpeg';
 
 const AccountScreen = (props) => {
    const dispatch = useDispatch();
    const [isLoading, setIsLoading] = useState(false);
    const [showSuccesMessage, setShowSuccesMessage] = useState(false);
    const userData = useSelector((state) => state.auth?.userData);
+   console.log('User Data:', userData);
 
    const firstName = userData?.firstName || '';
    const lastName = userData?.lastName || '';

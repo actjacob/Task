@@ -32,6 +32,8 @@ import MainNavigator from './MainNavigator';
 import AuthScreen from '../screens/AuthScreen';
 import { useSelector } from 'react-redux';
 import StartUpScreen from '../screens/StartUpScreen';
+import AdminBoardScreen from '../screens/AdminBoardScreen';
+import AdminMainNavigator from './AdminMainNavigator';
 
 const AppNavigator = (props) => {
    const isAuth = useSelector(
@@ -39,9 +41,12 @@ const AppNavigator = (props) => {
    );
    const didTryAutoLogin = useSelector((state) => state.auth.didTryAutoLogin);
 
+   const userRole = useSelector((state) => state.auth.userData?.role);
+
    return (
       <NavigationContainer>
-         {isAuth && <MainNavigator />}
+         {isAuth && userRole === 'admin' && <AdminMainNavigator />}
+         {isAuth && (userRole === 'staff' || !userRole) && <MainNavigator />}
          {!isAuth && didTryAutoLogin && <AuthScreen />}
          {!isAuth && !didTryAutoLogin && <StartUpScreen />}
       </NavigationContainer>
