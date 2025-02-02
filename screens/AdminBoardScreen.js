@@ -8,22 +8,39 @@ import {
    TouchableOpacity,
    FlatList,
    Modal,
+   TextInput,
 } from 'react-native';
 import MyCardScreen from './MyCardScreen';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-
-const boards = [
-   { id: '1', name: 'Jacob', color: 'purple' },
-   { id: '2', name: 'Jacob', color: 'blue' },
-];
+import colors from '../constants/colors';
+import BoardModal from './dropdownModal/BoardModal';
 
 const AdminBoardScreen = (props) => {
    // const navigation = useNavigation();
 
    const [menuVisible, setMenuVisible] = useState(false);
+   const [modalVisible, setModalVisible] = useState(false);
+   const [boards, setBoards] = useState([
+      { id: '1', name: 'Shared', color: 'purple' },
+      { id: '2', name: 'My own', color: 'blue' },
+      { id: '3', name: 'My workweek', color: 'darkblue' },
+   ]);
+   // const [newBoardName, setNewBoardName] = useState('');
+
+   const addNewBoard = (name, color) => {
+      if (name.trim() === '') return;
+      const newBoard = {
+         id: Math.random().toString(),
+         name,
+         color,
+      };
+      setBoards((prevBoards) => [...prevBoards, newBoard]);
+      // setNewBoardName('');
+      setModalVisible(false);
+   };
 
    return (
       <View style={styles.container}>
@@ -46,13 +63,21 @@ const AdminBoardScreen = (props) => {
                </View>
             )}
          />
+         <BoardModal
+            visible={modalVisible}
+            onClose={() => setModalVisible(false)}
+            onCreate={addNewBoard}
+         />
 
          {/* Popover Menu */}
          {menuVisible && (
             <View style={styles.popoverMenu}>
                <TouchableOpacity
                   style={styles.menuItem}
-                  onPress={() => setMenuVisible(false)}
+                  onPress={() => {
+                     setMenuVisible(false);
+                     setModalVisible(true);
+                  }}
                >
                   <Text style={styles.menuText}> Create a board </Text>
                   <Feather name="columns" size={24} color="black" />
@@ -71,6 +96,33 @@ const AdminBoardScreen = (props) => {
                   <Text style={styles.menuText}> Browse Templates </Text>
                   <Ionicons name="copy-outline" size={24} color="black" />
                </TouchableOpacity>
+
+               {/* Fullscreen Modal */}
+
+               {/* <Modal
+                  visible={modalVisible}
+                  animationType="slide"
+                  presentationStyle="pageSheet"
+               >
+                  <View style={styles.modalContainer}>
+                     <Text style={styles.modalTitle}>Create a New Board</Text>
+                     <TextInput
+                        style={styles.input}
+                        placeholder="Enter board name"
+                        value={newBoardName}
+                        onChangeText={setNewBoardName}
+                     />
+                     <TouchableOpacity style={styles.createButton} onPress={addNewBoard}>
+                        <Text style={styles.createButtonText}>Create</Text>
+                     </TouchableOpacity>
+                     <TouchableOpacity
+                        style={styles.closeButton}
+                        onPress={() => setModalVisible(false)}
+                     >
+                        <Text style={styles.closeButtonText}>Close</Text>
+                     </TouchableOpacity>
+                  </View>
+               </Modal> */}
             </View>
          )}
       </View>
@@ -141,6 +193,41 @@ const styles = StyleSheet.create({
    menuText: {
       fontSize: 16,
       color: '#333',
+   },
+   modalContainer: {
+      flex: 1,
+      alignItems: 'center',
+      backgroundColor: colors.nearlyWhite,
+   },
+   modalTitle: {
+      fontSize: 24,
+      marginBottom: 20,
+   },
+   input: {
+      width: '80%',
+      height: 40,
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 8,
+      paddingHorizontal: 10,
+      backgroundColor: colors.nearlyWhite,
+      marginBottom: 20,
+   },
+   createButton: {
+      backgroundColor: '#0079bf',
+      padding: 12,
+      borderRadius: 8,
+   },
+   createButtonText: {
+      color: 'white',
+      fontSize: 18,
+   },
+   closeButton: {
+      marginTop: 20,
+   },
+   closeButtonText: {
+      color: 'red',
+      fontSize: 16,
    },
 });
 

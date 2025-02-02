@@ -7,4 +7,6 @@ export default {
    primary: '#32d48e',
    purple: '#634eb5',
    red: '#e74c3c',
+   nearlyDarkBlue: '#007AFF',
+   white: '#ffffff',
 };
