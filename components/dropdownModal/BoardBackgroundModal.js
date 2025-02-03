@@ -15,6 +15,7 @@ const colorr = [
    'blue',
    'purple',
    'darkblue',
+   colors.midBlue,
 ];
 
 const BoardBackgroundModal = ({ visible, onClose, onSelectColor }) => {

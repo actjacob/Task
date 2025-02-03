@@ -11,7 +11,7 @@ import {
    TextInput,
 } from 'react-native';
 import MyCardScreen from './MyCardScreen';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationContainerRefContext, useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -19,7 +19,7 @@ import colors from '../constants/colors';
 import BoardModal from '../components/dropdownModal/BoardModal';
 
 const AdminBoardScreen = (props) => {
-   // const navigation = useNavigation();
+   const navigation = useNavigation();
 
    const [menuVisible, setMenuVisible] = useState(false);
    const [modalVisible, setModalVisible] = useState(false);
@@ -60,7 +60,12 @@ const AdminBoardScreen = (props) => {
             renderItem={({ item }) => (
                <TouchableOpacity
                   style={[styles.boardItem, { backgroundColor: item.color }]}
-                  onPress={() => console.log('Pressed', item.name)}
+                  onPress={() =>
+                     navigation.navigate('TaskScreen', {
+                        taskName: item.name,
+                        taskColor: item.color,
+                     })
+                  }
                >
                   <Text style={styles.boardText}> {item.name} </Text>
                   <Ionicons name="chevron-forward" size={24} color="white" />
