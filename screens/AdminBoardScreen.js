@@ -11,15 +11,15 @@ import {
    TextInput,
 } from 'react-native';
 import MyCardScreen from './MyCardScreen';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationContainerRefContext, useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import colors from '../constants/colors';
-import BoardModal from './dropdownModal/BoardModal';
+import BoardModal from '../components/dropdownModal/BoardModal';
 
 const AdminBoardScreen = (props) => {
-   // const navigation = useNavigation();
+   const navigation = useNavigation();
 
    const [menuVisible, setMenuVisible] = useState(false);
    const [modalVisible, setModalVisible] = useState(false);
@@ -58,9 +58,18 @@ const AdminBoardScreen = (props) => {
             data={boards}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-               <View style={[styles.boardItem, { backgroundColor: item.color }]}>
+               <TouchableOpacity
+                  style={[styles.boardItem, { backgroundColor: item.color }]}
+                  onPress={() =>
+                     navigation.navigate('TaskScreen', {
+                        taskName: item.name,
+                        taskColor: item.color,
+                     })
+                  }
+               >
                   <Text style={styles.boardText}> {item.name} </Text>
-               </View>
+                  <Ionicons name="chevron-forward" size={24} color="white" />
+               </TouchableOpacity>
             )}
          />
          <BoardModal
@@ -96,33 +105,6 @@ const AdminBoardScreen = (props) => {
                   <Text style={styles.menuText}> Browse Templates </Text>
                   <Ionicons name="copy-outline" size={24} color="black" />
                </TouchableOpacity>
-
-               {/* Fullscreen Modal */}
-
-               {/* <Modal
-                  visible={modalVisible}
-                  animationType="slide"
-                  presentationStyle="pageSheet"
-               >
-                  <View style={styles.modalContainer}>
-                     <Text style={styles.modalTitle}>Create a New Board</Text>
-                     <TextInput
-                        style={styles.input}
-                        placeholder="Enter board name"
-                        value={newBoardName}
-                        onChangeText={setNewBoardName}
-                     />
-                     <TouchableOpacity style={styles.createButton} onPress={addNewBoard}>
-                        <Text style={styles.createButtonText}>Create</Text>
-                     </TouchableOpacity>
-                     <TouchableOpacity
-                        style={styles.closeButton}
-                        onPress={() => setModalVisible(false)}
-                     >
-                        <Text style={styles.closeButtonText}>Close</Text>
-                     </TouchableOpacity>
-                  </View>
-               </Modal> */}
             </View>
          )}
       </View>
@@ -134,7 +116,6 @@ export default AdminBoardScreen;
 const styles = StyleSheet.create({
    container: {
       flex: 1,
-      alignItems: 'center',
       justifyContent: 'center',
    },
    header: {
@@ -160,10 +141,11 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
    },
    boardItem: {
-      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
       padding: 16,
       borderRadius: 8,
-      margin: 8,
+      margin: 10,
    },
    boardText: {
       color: 'white',

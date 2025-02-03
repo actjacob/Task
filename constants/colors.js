@@ -9,4 +9,5 @@ export default {
    red: '#e74c3c',
    nearlyDarkBlue: '#007AFF',
    white: '#ffffff',
+   midBlue: '#2E5C87',
 };

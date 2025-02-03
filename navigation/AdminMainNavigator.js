@@ -12,6 +12,7 @@ import MyCardScreen from '../screens/MyCardScreen';
 import SearchScreen from '../screens/SearchScreen';
 import Notifications from '../screens/NotificationsScreen';
 import AccountScreen from '../screens/AccountScreen';
+import TaskScreen from '../screens/TaskScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -105,6 +106,11 @@ const AdminMainNavigator = (props) => {
             options={{ headerShown: false }}
          />
          <Stack.Screen name="AdminBoard" component={AdminBoardScreen} />
+         <Stack.Screen
+            name="TaskScreen"
+            component={TaskScreen}
+            options={{ headerShown: false }}
+         />
       </Stack.Navigator>
    );
 };
