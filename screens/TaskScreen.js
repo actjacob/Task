@@ -15,13 +15,23 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import colors from '../constants/colors';
 import { set } from 'firebase/database';
+import { useNavigation } from '@react-navigation/native';
+import TaskSettingsModal from '../components/taskManagement/TaskSettingsModal';
 
 const TaskScreen = ({ route }) => {
+   const navigation = useNavigation();
    const { taskName, taskColor } = route.params;
    const [tasks, setTasks] = useState(['Learn React Native', 'Read Book 30 Page']);
    // const [modalVisible, setModalVisible] = useState(false);
    const [newTask, setNewTask] = useState('');
    const [isEditing, setIsEditing] = useState(false);
+   const [settingModalVisible, setSettingModalVisible] = useState(false);
+   const [selectedTaskName, setSelectedTaskName] = useState(null);
+
+   const openSettingsModal = () => {
+      setSelectedTaskName(taskName);
+      setSettingModalVisible(true);
+   };
 
    const handleAddTask = () => {
       if (!newTask.trim()) {
@@ -38,8 +48,8 @@ const TaskScreen = ({ route }) => {
          {/* Üst başlık */}
          <View style={styles.header}>
             <View style={styles.headerLeft}>
-               <TouchableOpacity>
-                  <Ionicons name="close" size={24} color={colors.white} />
+               <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Ionicons name="close" size={30} color={colors.white} />
                </TouchableOpacity>
                <Text style={styles.title}> {taskName} </Text>
             </View>
@@ -50,12 +60,11 @@ const TaskScreen = ({ route }) => {
                <TouchableOpacity>
                   <Ionicons name="notifications" size={24} color={colors.white} />
                </TouchableOpacity>
-               <TouchableOpacity>
+               <TouchableOpacity onPress={() => openSettingsModal(true)}>
                   <Entypo name="dots-three-horizontal" size={24} color={colors.white} />
                </TouchableOpacity>
             </View>
          </View>
-
          <View style={styles.inputContainer}>
             <FlatList
                data={tasks}
@@ -104,6 +113,12 @@ const TaskScreen = ({ route }) => {
                </View>
             )}
          </View>
+
+         <TaskSettingsModal
+            visible={settingModalVisible}
+            onClose={() => setSettingModalVisible(false)}
+            taskName={selectedTaskName}
+         />
       </View>
    );
 };
@@ -118,18 +133,20 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginTop: 20,
+      marginTop: 30,
       padding: 20,
       borderBottomWidth: 1,
       borderBottomColor: colors.white,
    },
    headerLeft: {
       flexDirection: 'row',
+      alignItems: 'center',
    },
    headerRight: {
       flexDirection: 'row',
-      gap: 15,
       justifyContent: 'space-between',
+      alignItems: 'center',
+      gap: 15,
    },
    title: {
       marginLeft: 20,
@@ -184,20 +201,5 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
       alignItems: 'center',
       marginTop: 10,
-   },
-   addCardButtonText: {},
-   addCardButton: { padding: 10, marginTop: 10 },
-   addCardText: { color: '#666' },
-
-   modalContainer: {
-      flex: 1,
-      justifyContent: 'flex-end',
-      backgroundColor: 'rgba(0,0,0,0.3)',
-   },
-   modalContent: {
-      backgroundColor: '#fff',
-      padding: 20,
-      borderTopLeftRadius: 15,
-      borderTopRightRadius: 15,
    },
 });
