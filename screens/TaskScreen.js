@@ -1,42 +1,3 @@
-// import React from 'react';
-// import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-// import { Ionicons } from '@expo/vector-icons';
-// import colors from '../constants/colors';
-
-// const TaskScreen = ({ route, onClose }) => {
-//    const { taskName, taskColor } = route.params || {};
-
-//    return (
-//       <View style={[styles.container, { backgroundColor: taskColor || 'white' }]}>
-//          <View style={styles.header}>
-//             <TouchableOpacity onPress={onClose}>
-//                <Ionicons name="close" size={24} color={colors.nearlyDarkBlue} />
-//             </TouchableOpacity>
-//             <Text style={styles.text}>Task: {taskName}</Text>
-//          </View>
-//       </View>
-//    );
-// };
-
-// export default TaskScreen;
-
-// const styles = StyleSheet.create({
-//    container: {
-//       flex: 1,
-//       backgroundColor: '#f5f5f5',
-//    },
-//    header: {
-//       padding: 16,
-//       margin: 30,
-//       flexDirection: 'row',
-//       justifyContent: 'space-between',
-//    },
-//    text: {
-//       fontSize: 20,
-//       fontWeight: 'bold',
-//    },
-// });
-
 import React, { useState } from 'react';
 import {
    View,
@@ -49,13 +10,29 @@ import {
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
+import Feather from '@expo/vector-icons/Feather';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import colors from '../constants/colors';
+import { set } from 'firebase/database';
 
 const TaskScreen = ({ route }) => {
    const { taskName, taskColor } = route.params;
-   const [tasks, setTasks] = useState(['Learn React Native']);
-   const [modalVisible, setModalVisible] = useState(false);
+   const [tasks, setTasks] = useState(['Learn React Native', 'Read Book 30 Page']);
+   // const [modalVisible, setModalVisible] = useState(false);
+   const [newTask, setNewTask] = useState('');
+   const [isEditing, setIsEditing] = useState(false);
 
+   const handleAddTask = () => {
+      if (!newTask.trim()) {
+         alert('Task cannot be empty!');
+         return;
+      }
+      setTasks([...tasks, newTask.trim()]);
+      setNewTask('');
+      setIsEditing(false);
+      // setModalVisible(false);
+   };
    return (
       <View style={[styles.container, { backgroundColor: taskColor }]}>
          {/* Üst başlık */}
@@ -66,7 +43,6 @@ const TaskScreen = ({ route }) => {
                </TouchableOpacity>
                <Text style={styles.title}> {taskName} </Text>
             </View>
-
             <View style={styles.headerRight}>
                <TouchableOpacity>
                   <Ionicons name="reorder-four-sharp" size={24} color={colors.white} />
@@ -80,53 +56,54 @@ const TaskScreen = ({ route }) => {
             </View>
          </View>
 
-         {/* Task Listesi */}
-         <View style={styles.listContainer}>
-            <Text style={styles.listTitle}>Today</Text>
-
+         <View style={styles.inputContainer}>
             <FlatList
                data={tasks}
                keyExtractor={(item, index) => index.toString()}
                renderItem={({ item }) => (
                   <View style={styles.taskCard}>
-                     <Text style={styles.taskText}>{item}</Text>
+                     <Text style={styles.taskText}> {item} </Text>
                   </View>
                )}
             />
 
-            {/* + Add Card Butonu */}
-            <TouchableOpacity
-               style={styles.addCardButton}
-               onPress={() => setModalVisible(true)}
-            >
-               <Text style={styles.addCardText}>+ Add card</Text>
-            </TouchableOpacity>
-         </View>
+            <TextInput
+               style={styles.input}
+               placeholder="enter new task"
+               value={newTask}
+               onChangeText={(text) => {
+                  setNewTask(text);
+                  setIsEditing(text.length > 0);
+               }}
+            />
 
-         {/* Modal (Alttan Açılan Menü) */}
-         <Modal
-            visible={modalVisible}
-            animationType="slide"
-            transparent={true}
-            onRequestClose={() => setModalVisible(false)}
-         >
-            <View style={styles.modalContainer}>
-               <View style={styles.modalContent}>
-                  <TouchableOpacity onPress={() => setModalVisible(false)}>
-                     <Text style={styles.cancelText}>Cancel</Text>
+            {/* Kullanıcı yazmaya başladıysa Butonlar Görünsün */}
+            {isEditing ? (
+               <View style={styles.buttonRow}>
+                  <TouchableOpacity
+                     onPress={() => {
+                        setNewTask('');
+                        setIsEditing(false);
+                     }}
+                  >
+                     <Text style={styles.cancelButtonText}>Cancel</Text>
                   </TouchableOpacity>
 
-                  <TextInput style={styles.input} value="Today" editable={false} />
-
-                  <TouchableOpacity
-                     style={styles.closeListButton}
-                     onPress={() => setModalVisible(false)}
-                  >
-                     <Text style={styles.closeListText}>Close List</Text>
+                  <TouchableOpacity onPress={handleAddTask}>
+                     <Text style={styles.saveButtonText}>Save</Text>
                   </TouchableOpacity>
                </View>
-            </View>
-         </Modal>
+            ) : (
+               <View style={styles.addCardContainer}>
+                  <TouchableOpacity onPress={() => setIsEditing(true)}>
+                     <Text style={styles.addCardButtonText}>+ Add new card</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setIsEditing(true)}>
+                     <AntDesign name="picture" size={24} color="black" />
+                  </TouchableOpacity>
+               </View>
+            )}
+         </View>
       </View>
    );
 };
@@ -144,7 +121,7 @@ const styles = StyleSheet.create({
       marginTop: 20,
       padding: 20,
       borderBottomWidth: 1,
-      borderBottomColor: '#fff',
+      borderBottomColor: colors.white,
    },
    headerLeft: {
       flexDirection: 'row',
@@ -156,21 +133,59 @@ const styles = StyleSheet.create({
    },
    title: {
       marginLeft: 20,
-      color: '#fff',
+      color: colors.white,
       fontSize: 18,
    },
-
-   listContainer: {
-      margin: 20,
-      backgroundColor: '#EDEDED',
+   inputContainer: {
+      backgroundColor: colors.nearlyWhite,
       padding: 15,
-      borderRadius: 8,
+      borderRadius: 10,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
+      marginHorizontal: 10,
+      marginTop: 10,
    },
-   listTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
+   input: {
+      backgroundColor: colors.nearlyWhite,
+      padding: 10,
+      borderRadius: 8,
+      fontSize: 16,
+      borderWidth: 1,
+   },
 
-   taskCard: { backgroundColor: '#fff', padding: 10, borderRadius: 5, marginBottom: 5 },
-   taskText: { fontSize: 16 },
-
+   taskCard: {
+      backgroundColor: colors.white,
+      padding: 10,
+      borderRadius: 5,
+      marginBottom: 5,
+   },
+   taskText: {
+      fontSize: 16,
+   },
+   buttonRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: 10,
+   },
+   cancelButtonText: {
+      color: colors.red,
+      fontSize: 16,
+      marginBottom: 10,
+   },
+   saveButtonText: {
+      fontSize: 16,
+      color: colors.nearlyDarkBlue,
+   },
+   addCardContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginTop: 10,
+   },
+   addCardButtonText: {},
    addCardButton: { padding: 10, marginTop: 10 },
    addCardText: { color: '#666' },
 
@@ -185,13 +200,4 @@ const styles = StyleSheet.create({
       borderTopLeftRadius: 15,
       borderTopRightRadius: 15,
    },
-   cancelText: { color: 'blue', marginBottom: 10 },
-   input: { backgroundColor: '#f0f0f0', padding: 10, borderRadius: 5, fontSize: 16 },
-   closeListButton: {
-      backgroundColor: '#EDEDED',
-      padding: 15,
-      marginTop: 20,
-      borderRadius: 5,
-   },
-   closeListText: { textAlign: 'center', fontSize: 16, fontWeight: 'bold' },
 });
