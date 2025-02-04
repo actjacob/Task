@@ -1,5 +1,6 @@
 export default {
    blue: '#3498db',
+   blue2: '#3B82F6',
    lightGray: '#bdc3c7',
    nearlyWhite: '#F4F8F7',
    gray: '#7f8c8d',
@@ -10,4 +11,5 @@ export default {
    nearlyDarkBlue: '#007AFF',
    white: '#ffffff',
    midBlue: '#2E5C87',
+   black: '#000000',
 };

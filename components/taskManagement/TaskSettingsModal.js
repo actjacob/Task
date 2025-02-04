@@ -7,10 +7,15 @@ import {
    Text,
    StyleSheet,
    TextInput,
+   Image,
+   Button,
 } from 'react-native';
 import colors from '../../constants/colors';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useSelector } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons';
+import ProfileImage from '../ProfileImage';
+import userImage from '../../assets/userImage.jpeg';
 
 const TaskSettingsModal = ({
    route,
@@ -33,6 +38,7 @@ const TaskSettingsModal = ({
    const firstName = capitalizeFirstLetter(userData?.firstName || '');
    const lastName = capitalizeFirstLetter(userData?.lastName || '');
    const userEmail = userData.email || '';
+   const profileImageUri = userData?.profilePicture || userImage;
 
    const userName = `${firstName} ${lastName}`.trim();
 
@@ -41,7 +47,16 @@ const TaskSettingsModal = ({
          <View style={styles.container}>
             <View style={styles.header}>
                <TouchableOpacity onPress={onClose}>
-                  <Text style={styles.closeText}>Close</Text>
+                  <Ionicons
+                     name="close"
+                     size={24}
+                     color={colors.black}
+                     style={{
+                        backgroundColor: colors.nearlyWhite,
+                        borderRadius: 50,
+                        padding: 10,
+                     }}
+                  />
                </TouchableOpacity>
 
                <Text style={styles.headerTitle}>Board Menu</Text>
@@ -61,11 +76,22 @@ const TaskSettingsModal = ({
             <View style={styles.membersContainer}>
                <View style={styles.membersHeader}>
                   <FontAwesome5 name="user" size={24} color="black" />
-                  <Text style={styles.boardName}> {userName} </Text>
+                  <Text style={styles.memberName}> {userName} </Text>
                </View>
 
-               <Text style={styles.boardName}> {userEmail} </Text>
+               <View style={styles.profileContainer}>
+                  <Image style={styles.profileImage} source={{ uri: profileImageUri }} />
+
+                  <Text style={styles.memberMail}> {userEmail} </Text>
+               </View>
+               <TouchableOpacity style={styles.inviteButton} onPress={onInvite}>
+                  <Text style={styles.inviteText}>Invite...</Text>
+               </TouchableOpacity>
             </View>
+
+            <TouchableOpacity style={styles.closeBoardButton} onPress={onClose}>
+               <Text style={styles.closeBoardText}>Close Board</Text>
+            </TouchableOpacity>
          </View>
       </Modal>
    );
@@ -86,6 +112,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       padding: 20,
       borderBottomWidth: 1,
+      borderBlockColor: colors.lightGray,
       backgroundColor: colors.white,
    },
    headerTitle: {
@@ -114,10 +141,59 @@ const styles = StyleSheet.create({
       color: colors.midBlue,
    },
    membersContainer: {
-      marginTop: 20,
+      marginTop: 50,
       backgroundColor: colors.white,
+      padding: 20,
    },
    membersHeader: {
       flexDirection: 'row',
+      marginBottom: 30,
+      alignItems: 'center',
+      gap: 10,
+   },
+   memberName: {
+      color: colors.black,
+      fontSize: 20,
+   },
+   profileContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 8,
+      gap: 10,
+   },
+   profileImage: {
+      width: 50,
+      height: 50,
+      borderRadius: 50,
+      borderWidth: 1,
+      borderColor: colors.gray,
+   },
+   memberMail: {
+      fontSize: 18,
+      color: colors.gray,
+   },
+   inviteButton: {
+      backgroundColor: colors.blue2,
+      padding: 12,
+      borderRadius: 8,
+      alignItems: 'center',
+      marginTop: 10,
+   },
+   inviteText: {
+      color: 'white',
+      fontSize: 16,
+   },
+   closeBoardButton: {
+      backgroundColor: colors.white,
+      padding: 12,
+      margin: 20,
+
+      borderRadius: 8,
+      alignItems: 'center',
+      marginTop: 10,
+   },
+   closeBoardText: {
+      color: 'black',
+      fontSize: 16,
    },
 });
