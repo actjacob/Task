@@ -45,8 +45,8 @@ const AppNavigator = (props) => {
 
    return (
       <NavigationContainer>
-         {isAuth && userRole === 'admin' && <AdminMainNavigator />}
-         {isAuth && (userRole === 'staff' || !userRole) && <MainNavigator />}
+         {isAuth && (userRole === 'admin' || !userRole) && <AdminMainNavigator />}
+         {isAuth && userRole === 'staff' && <MainNavigator />}
          {!isAuth && didTryAutoLogin && <AuthScreen />}
          {!isAuth && !didTryAutoLogin && <StartUpScreen />}
       </NavigationContainer>
