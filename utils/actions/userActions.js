@@ -21,3 +21,16 @@ export const getUserData = async (userId) => {
       console.log(error);
    }
 };
+
+export const getAllUsers = async () => {
+   try {
+      const app = getFirebaseApp();
+      const dbRef = ref(getDatabase(app));
+      const usersRef = child(ref(dbRef, 'users'));
+
+      const snapshot = await get(usersRef);
+      return snapshot.exists() ? snapshot.val() : {};
+   } catch (error) {
+      console.log('Error fetching users:', error);
+   }
+};

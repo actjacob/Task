@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
    View,
    Text,
@@ -15,7 +15,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import colors from '../constants/colors';
 import { set } from 'firebase/database';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import TaskSettingsModal from '../components/taskManagement/TaskSettingsModal';
 
 const TaskScreen = ({ route }) => {
@@ -43,6 +43,14 @@ const TaskScreen = ({ route }) => {
       setIsEditing(false);
       // setModalVisible(false);
    };
+
+   useEffect(() => {
+      if (route.params?.deletedTask) {
+         // navigation.goBack(route.params); // Silinen task'ı bir üst ekrana ilet
+         console.log('TaskScreen - Silinen Task:', route.params.deletedTask);
+         navigation.goBack();
+      }
+   }, [route.params?.deletedTask]);
    return (
       <View style={[styles.container, { backgroundColor: taskColor }]}>
          {/* Üst başlık */}

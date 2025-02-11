@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
    StyleSheet,
    View,
@@ -11,7 +11,11 @@ import {
    TextInput,
 } from 'react-native';
 import MyCardScreen from './MyCardScreen';
-import { NavigationContainerRefContext, useNavigation } from '@react-navigation/native';
+import {
+   NavigationContainerRefContext,
+   useNavigation,
+   useRoute,
+} from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -20,6 +24,7 @@ import BoardModal from '../components/dropdownModal/BoardModal';
 
 const AdminBoardScreen = (props) => {
    const navigation = useNavigation();
+   const route = useRoute();
 
    const [menuVisible, setMenuVisible] = useState(false);
    const [modalVisible, setModalVisible] = useState(false);
@@ -29,6 +34,7 @@ const AdminBoardScreen = (props) => {
       { id: '3', name: 'My workweek', color: 'darkblue' },
    ]);
    // const [newBoardName, setNewBoardName] = useState('');
+   // import Swipeable from 'react-native-gesture-handler/Swipeable';
 
    const addNewBoard = (name, color) => {
       if (name.trim() === '') return;
@@ -41,6 +47,30 @@ const AdminBoardScreen = (props) => {
       // setNewBoardName('');
       setModalVisible(false);
    };
+
+   // useEffect(() => {
+   //    const unsubscribe = navigation.addListener('focus', () => {
+   //       if (route.params?.deletedTask) {
+   //          console.log('Silinen Task:', route.params.deletedTask);
+   //          setBoards((prevBoards) =>
+   //             prevBoards.filter((board) => board.name !== route.params.deletedTask)
+   //          );
+   //       }
+   //    });
+   //    return unsubscribe;
+   // }, [navigation, route.params]);
+   useEffect(() => {
+      if (route.params?.deletedTask) {
+         console.log('AdminBoardScreen - Silinen Task:', route.params.deletedTask);
+
+         setBoards((prevBoards) =>
+            prevBoards.filter((board) => board.name !== route.params.deletedTask)
+         );
+
+         // Parametreyi temizleyerek tekrar focus olduğunda işlem yapmasını engelle
+         navigation.setParams({ deletedTask: null });
+      }
+   }, [route.params?.deletedTask]);
 
    return (
       <View style={styles.container}>
