@@ -16,6 +16,8 @@ import { useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import ProfileImage from '../ProfileImage';
 import userImage from '../../assets/userImage.jpeg';
+import BoardMembersModal from './BoardMembersModal';
+import { useNavigation } from '@react-navigation/native';
 
 const TaskSettingsModal = ({
    route,
@@ -27,10 +29,18 @@ const TaskSettingsModal = ({
    onInvite,
    onCloseBoard,
 }) => {
+   const navigation = useNavigation();
+
    const [editedBoardName, setEditedBoardName] = useState(taskName);
+   const [modalVisible, setModalVisible] = useState(false);
 
    const capitalizeFirstLetter = (string) => {
       return string ? string.charAt(0).toUpperCase() + string.slice(1).toLowerCase() : '';
+   };
+
+   const handleDeleteTask = () => {
+      navigation.setParams({ deletedTask: taskName });
+      navigation.goBack();
    };
 
    //Redux information
@@ -84,13 +94,20 @@ const TaskSettingsModal = ({
 
                   <Text style={styles.memberMail}> {userEmail} </Text>
                </View>
-               <TouchableOpacity style={styles.inviteButton} onPress={onInvite}>
-                  <Text style={styles.inviteText}>Invite...</Text>
+               <TouchableOpacity
+                  style={styles.inviteButton}
+                  onPress={() => setModalVisible(true)}
+               >
+                  <Text style={styles.inviteText}>Manage Board Members</Text>
                </TouchableOpacity>
+               <BoardMembersModal
+                  visible={modalVisible}
+                  onClose={() => setModalVisible(false)}
+               />
             </View>
 
-            <TouchableOpacity style={styles.closeBoardButton} onPress={onClose}>
-               <Text style={styles.closeBoardText}>Close Board</Text>
+            <TouchableOpacity style={styles.closeBoardButton} onPress={handleDeleteTask}>
+               <Text style={styles.closeBoardText}>Delete Board</Text>
             </TouchableOpacity>
          </View>
       </Modal>
@@ -116,7 +133,8 @@ const styles = StyleSheet.create({
       backgroundColor: colors.white,
    },
    headerTitle: {
-      fontSize: 20,
+      fontSize: 18,
+      fontWeight: 'bold',
       flex: 1,
       textAlign: 'center',
       marginRight: 40,
@@ -184,16 +202,15 @@ const styles = StyleSheet.create({
       fontSize: 16,
    },
    closeBoardButton: {
-      backgroundColor: colors.white,
+      backgroundColor: colors.red,
       padding: 12,
       margin: 20,
-
       borderRadius: 8,
       alignItems: 'center',
       marginTop: 10,
    },
    closeBoardText: {
-      color: 'black',
+      color: colors.white,
       fontSize: 16,
    },
 });
