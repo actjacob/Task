@@ -37,3 +37,4 @@ yarn-error.*
 
 #realtimedatabase
 utils/firebaseHelper.js
+utils/firebaseLegacy.js

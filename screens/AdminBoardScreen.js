@@ -21,6 +21,8 @@ import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import colors from '../constants/colors';
 import BoardModal from '../components/dropdownModal/BoardModal';
+import { db } from '../utils/fireStoreHelper';
+import { collection, addDoc, onSnapshot, getDocs } from 'firebase/firestore';
 
 const AdminBoardScreen = (props) => {
    const navigation = useNavigation();
@@ -28,37 +30,57 @@ const AdminBoardScreen = (props) => {
 
    const [menuVisible, setMenuVisible] = useState(false);
    const [modalVisible, setModalVisible] = useState(false);
-   const [boards, setBoards] = useState([
-      { id: '1', name: 'Shared', color: 'purple' },
-      { id: '2', name: 'My own', color: 'blue' },
-      { id: '3', name: 'My workweek', color: 'darkblue' },
-   ]);
+   const [boards, setBoards] = useState([]);
    // const [newBoardName, setNewBoardName] = useState('');
    // import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-   const addNewBoard = (name, color) => {
+   const addNewBoard = async (name, color) => {
       if (name.trim() === '') return;
-      const newBoard = {
-         id: Math.random().toString(),
-         name,
-         color,
-      };
-      setBoards((prevBoards) => [...prevBoards, newBoard]);
-      // setNewBoardName('');
-      setModalVisible(false);
+
+      try {
+         const docRef = await addDoc(collection(db, 'boards'), {
+            name: name,
+            color: color,
+            createAt: new Date(),
+         });
+
+         console.log('Firestore - Board eklendi, ID:', docRef.id);
+
+         // const newBoard = {
+         //    id: Math.random().toString(),
+         //    name,
+         //    color,
+         // };
+         const newBoard = {
+            id: docRef.id,
+            name,
+            color,
+         };
+         setBoards((prevBoards) => [...prevBoards, newBoard]);
+         // setNewBoardName('');
+         setModalVisible(false);
+      } catch (error) {
+         console.error('Firestore - Board eklerken hata oluştu:', error);
+      }
    };
 
-   // useEffect(() => {
-   //    const unsubscribe = navigation.addListener('focus', () => {
-   //       if (route.params?.deletedTask) {
-   //          console.log('Silinen Task:', route.params.deletedTask);
-   //          setBoards((prevBoards) =>
-   //             prevBoards.filter((board) => board.name !== route.params.deletedTask)
-   //          );
-   //       }
-   //    });
-   //    return unsubscribe;
-   // }, [navigation, route.params]);
+   const fetchBoards = async () => {
+      try {
+         const querySnapshot = await getDocs(collection(db, 'boards'));
+         const boardsList = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+         }));
+         setBoards(boardsList);
+      } catch (error) {
+         console.error("Firestore'dan boardları çekerken hata oluştu", error);
+      }
+   };
+
+   useEffect(() => {
+      fetchBoards();
+   }, []);
+
    useEffect(() => {
       if (route.params?.deletedTask) {
          console.log('AdminBoardScreen - Silinen Task:', route.params.deletedTask);
@@ -94,6 +116,12 @@ const AdminBoardScreen = (props) => {
                      navigation.navigate('TaskScreen', {
                         taskName: item.name,
                         taskColor: item.color,
+                        boardId: item.id,
+                        onBoardDeleted: (deletedBoardId) => {
+                           setBoards((prevBoards) =>
+                              prevBoards.filter((board) => board.id !== deletedBoardId)
+                           );
+                        },
                      })
                   }
                >

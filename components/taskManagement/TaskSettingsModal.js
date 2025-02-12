@@ -18,12 +18,16 @@ import ProfileImage from '../ProfileImage';
 import userImage from '../../assets/userImage.jpeg';
 import BoardMembersModal from './BoardMembersModal';
 import { useNavigation } from '@react-navigation/native';
+import { db } from '../../utils/fireStoreHelper';
+// import { doc, deleteDoc } from 'firebase/firestore';
+import { doc, deleteDoc, query, where, getDocs, collection } from 'firebase/firestore';
 
 const TaskSettingsModal = ({
    route,
    visible,
    onClose,
    taskName,
+   onBoardDeleted,
    members,
    onUpdateBoardName,
    onInvite,
@@ -38,9 +42,33 @@ const TaskSettingsModal = ({
       return string ? string.charAt(0).toUpperCase() + string.slice(1).toLowerCase() : '';
    };
 
-   const handleDeleteTask = () => {
-      navigation.setParams({ deletedTask: taskName });
-      navigation.goBack();
+   const handleDeleteBoard = async () => {
+      if (!taskName) return;
+      try {
+         // 'boards' koleksiyonunda, 'name' alanına göre sorgulama yapıyoruz
+         const q = query(collection(db, 'boards'), where('name', '==', taskName));
+         const querySnapshot = await getDocs(q);
+
+         if (querySnapshot.empty) {
+            console.log('Board bulunamadı');
+            return;
+         }
+
+         // İlk eşleşen board'un ID'sini alıyoruz
+         const boardId = querySnapshot.docs[0].id;
+
+         // Şimdi, bu ID'yi kullanarak board'u silmek
+         const boardRef = doc(db, 'boards', boardId);
+         await deleteDoc(boardRef);
+
+         console.log(`Firestore - ${taskName} isimli board silindi`);
+
+         onBoardDeleted?.(boardId);
+         onClose(); // Modalı kapat
+         navigation.goBack(); // Geri git
+      } catch (error) {
+         console.error('Board silinirken bir hata oluştu:', error);
+      }
    };
 
    //Redux information
@@ -106,7 +134,10 @@ const TaskSettingsModal = ({
                />
             </View>
 
-            <TouchableOpacity style={styles.closeBoardButton} onPress={handleDeleteTask}>
+            <TouchableOpacity
+               style={styles.deleteBoardButton}
+               onPress={handleDeleteBoard}
+            >
                <Text style={styles.closeBoardText}>Delete Board</Text>
             </TouchableOpacity>
          </View>
@@ -201,7 +232,7 @@ const styles = StyleSheet.create({
       color: 'white',
       fontSize: 16,
    },
-   closeBoardButton: {
+   deleteBoardButton: {
       backgroundColor: colors.red,
       padding: 12,
       margin: 20,
