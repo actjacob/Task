@@ -123,6 +123,7 @@ const createUser = async (firstName, lastName, email, userId, role) => {
       userId,
       role,
       signUpDate: new Date().toISOString(),
+      boardIds: [],
    };
 
    const dbRef = ref(getDatabase());

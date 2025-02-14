@@ -1,5 +1,8 @@
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { getFirebaseApp } from './firebaseHelper';
+import { getDatabase } from 'firebase/database';
 
 const app = getFirebaseApp();
-export const db = getFirestore(app);
+export const firestoreDB = getFirestore(app);
+
+export const db = getDatabase(app); // Realtime Database için
