@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
    Modal,
    View,
@@ -18,7 +18,7 @@ import ProfileImage from '../ProfileImage';
 import userImage from '../../assets/userImage.jpeg';
 import BoardMembersModal from './BoardMembersModal';
 import { useNavigation } from '@react-navigation/native';
-import { db } from '../../utils/fireStoreHelper';
+import { db, firestoreDB } from '../../utils/fireStoreHelper';
 // import { doc, deleteDoc } from 'firebase/firestore';
 import { doc, deleteDoc, query, where, getDocs, collection } from 'firebase/firestore';
 
@@ -32,11 +32,18 @@ const TaskSettingsModal = ({
    onUpdateBoardName,
    onInvite,
    onCloseBoard,
-}) => {
-   const navigation = useNavigation();
 
+   ...props
+}) => {
+   const boardId = route?.params?.boardId || props.boardId || '';
+
+   const navigation = useNavigation();
    const [editedBoardName, setEditedBoardName] = useState(taskName);
    const [modalVisible, setModalVisible] = useState(false);
+
+   useEffect(() => {
+      console.log('TaskSettingsModal açıldı - Gelen boardId:', boardId);
+   }, [boardId]);
 
    const capitalizeFirstLetter = (string) => {
       return string ? string.charAt(0).toUpperCase() + string.slice(1).toLowerCase() : '';
@@ -46,7 +53,10 @@ const TaskSettingsModal = ({
       if (!taskName) return;
       try {
          // 'boards' koleksiyonunda, 'name' alanına göre sorgulama yapıyoruz
-         const q = query(collection(db, 'boards'), where('name', '==', taskName));
+         const q = query(
+            collection(firestoreDB, 'boards'),
+            where('name', '==', taskName)
+         );
          const querySnapshot = await getDocs(q);
 
          if (querySnapshot.empty) {
@@ -58,7 +68,7 @@ const TaskSettingsModal = ({
          const boardId = querySnapshot.docs[0].id;
 
          // Şimdi, bu ID'yi kullanarak board'u silmek
-         const boardRef = doc(db, 'boards', boardId);
+         const boardRef = doc(firestoreDB, 'boards', boardId);
          await deleteDoc(boardRef);
 
          console.log(`Firestore - ${taskName} isimli board silindi`);
@@ -102,6 +112,7 @@ const TaskSettingsModal = ({
             <View style={styles.boardNameContainer}>
                <Text style={styles.boardNameText}>Board Name </Text>
                <Text style={styles.boardName}>{taskName} </Text>
+               <Text style={styles.boardName}>{boardId} </Text>
             </View>
 
             {/* <TextInput
@@ -128,10 +139,19 @@ const TaskSettingsModal = ({
                >
                   <Text style={styles.inviteText}>Manage Board Members</Text>
                </TouchableOpacity>
+
                <BoardMembersModal
                   visible={modalVisible}
                   onClose={() => setModalVisible(false)}
+                  boardId={boardId || ''}
+                  boardMembers={members || []}
+                  taskName={taskName}
                />
+               {/* <InviteUsersModal
+                  visible={inviteModalVisible}
+                  onClose={() => setInviteModalVisible(false)}
+                  boardId={boardId}
+               /> */}
             </View>
 
             <TouchableOpacity

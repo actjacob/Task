@@ -25,6 +25,17 @@ const BoardScreen = (props) => {
 
    const [menuVisible, setMenuVisible] = useState(false);
 
+   const getUserBoards = async (userId) => {
+      const userRef = ref(realtimeDB, `users/${userId}/boards`);
+      const userBoardsSnap = await get(userRef);
+
+      if (userBoardsSnap.exists()) {
+         return Object.keys(userBoardsSnap.val()); // Kullanıcının boardId'lerini al
+      } else {
+         return [];
+      }
+   };
+
    return (
       <View style={styles.container}>
          {/* Header */}

@@ -5,7 +5,6 @@ import colors from '../../constants/colors';
 const colorr = [
    '#4682B4',
    '#DAA520',
-   '#32CD32',
    '#B22222',
    '#8A2BE2',
    '#D14795',
@@ -16,6 +15,38 @@ const colorr = [
    'purple',
    'darkblue',
    colors.midBlue,
+   '#FF3B30',
+   '#FF453A',
+   '#D70015',
+   '#FF6961',
+   '#FF9500',
+   '#FF9F0A',
+   '#C93400',
+   '#FFB340',
+   '#FFCC00',
+   '#FFD60A',
+   '#B25000',
+   '#FFDA26',
+   '#34C759',
+   '#30D158',
+   '#248A3D',
+   '#30DB5A',
+   '#00C7BE',
+   '#63E6E2',
+   '#0C817B',
+   '#66D4CF',
+   '#30B0C7',
+   '#40C8E0',
+   '#008299',
+   '#5DB6FF',
+   '#32B7E6',
+   '#64D2FF',
+   '#0071A4',
+   '#70C0FF',
+   '#007AFF',
+   '#0A84FF',
+   '#003FFF',
+   '#406CFF',
 ];
 
 const BoardBackgroundModal = ({ visible, onClose, onSelectColor }) => {
@@ -29,7 +60,8 @@ const BoardBackgroundModal = ({ visible, onClose, onSelectColor }) => {
             <Text style={styles.header}>Board Background</Text>
             <FlatList
                data={colorr}
-               numColumns={3}
+               showsVerticalScrollIndicator={false}
+               numColumns={4}
                keyExtractor={(item) => item}
                renderItem={({ item }) => (
                   <TouchableOpacity
@@ -68,9 +100,9 @@ const styles = StyleSheet.create({
       textAlign: 'center',
    },
    colorBox: {
-      width: 100,
-      height: 100,
-      margin: 13,
+      width: 85,
+      height: 85,
+      margin: 5,
       borderRadius: 10,
    },
 });

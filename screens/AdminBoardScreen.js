@@ -21,7 +21,7 @@ import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import colors from '../constants/colors';
 import BoardModal from '../components/dropdownModal/BoardModal';
-import { db } from '../utils/fireStoreHelper';
+import { db, firestoreDB } from '../utils/fireStoreHelper';
 import { collection, addDoc, onSnapshot, getDocs } from 'firebase/firestore';
 
 const AdminBoardScreen = (props) => {
@@ -38,7 +38,7 @@ const AdminBoardScreen = (props) => {
       if (name.trim() === '') return;
 
       try {
-         const docRef = await addDoc(collection(db, 'boards'), {
+         const docRef = await addDoc(collection(firestoreDB, 'boards'), {
             name: name,
             color: color,
             createAt: new Date(),
@@ -51,12 +51,14 @@ const AdminBoardScreen = (props) => {
          //    name,
          //    color,
          // };
+
          const newBoard = {
             id: docRef.id,
             name,
             color,
          };
          setBoards((prevBoards) => [...prevBoards, newBoard]);
+
          // setNewBoardName('');
          setModalVisible(false);
       } catch (error) {
@@ -66,11 +68,14 @@ const AdminBoardScreen = (props) => {
 
    const fetchBoards = async () => {
       try {
-         const querySnapshot = await getDocs(collection(db, 'boards'));
-         const boardsList = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-         }));
+         const querySnapshot = await getDocs(collection(firestoreDB, 'boards'));
+         const boardsList = querySnapshot.docs
+            .map((doc) => ({
+               id: doc.id,
+               ...doc.data(),
+            }))
+            .sort((a, b) => a.createAt - b.createAt);
+
          setBoards(boardsList);
       } catch (error) {
          console.error("Firestore'dan boardları çekerken hata oluştu", error);

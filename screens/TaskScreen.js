@@ -21,7 +21,7 @@ import TaskSettingsModal from '../components/taskManagement/TaskSettingsModal';
 const TaskScreen = () => {
    const navigation = useNavigation();
    const route = useRoute();
-   const { taskName, taskColor } = route.params;
+   const { taskName, taskColor, boardId } = route.params;
    const [tasks, setTasks] = useState(['Learn React Native', 'Read Book 30 Page']);
    // const [modalVisible, setModalVisible] = useState(false);
    const [newTask, setNewTask] = useState('');
@@ -29,23 +29,23 @@ const TaskScreen = () => {
    const [settingModalVisible, setSettingModalVisible] = useState(false);
    const [selectedTaskName, setSelectedTaskName] = useState(null);
 
-   const { boardId, onBoardDeleted } = route.params || {};
+   const { onBoardDeleted } = route.params || {};
 
-   const deleteBoard = async () => {
-      try {
-         await deleteDoc(doc(db, 'boards', boardId));
-         console.log('Board başarıyla silindi:', boardId);
+   // const deleteBoard = async () => {
+   //    try {
+   //       await deleteDoc(doc(db, 'boards', boardId));
+   //       console.log('Board başarıyla silindi:', boardId);
 
-         // Eğer callback fonksiyonu varsa çağır
-         if (onBoardDeleted) {
-            onBoardDeleted(boardId);
-         }
+   //       // Eğer callback fonksiyonu varsa çağır
+   //       if (onBoardDeleted) {
+   //          onBoardDeleted(boardId);
+   //       }
 
-         navigation.goBack(); // AdminBoardScreen'e geri dön
-      } catch (error) {
-         console.error('Board silme hatası:', error);
-      }
-   };
+   //       navigation.goBack(); // AdminBoardScreen'e geri dön
+   //    } catch (error) {
+   //       console.error('Board silme hatası:', error);
+   //    }
+   // };
 
    const openSettingsModal = () => {
       setSelectedTaskName(taskName);
@@ -63,13 +63,13 @@ const TaskScreen = () => {
       // setModalVisible(false);
    };
 
-   useEffect(() => {
-      if (route.params?.deletedTask) {
-         // navigation.goBack(route.params); // Silinen task'ı bir üst ekrana ilet
-         console.log('TaskScreen - Silinen Task:', route.params.deletedTask);
-         navigation.goBack();
-      }
-   }, [route.params?.deletedTask]);
+   // useEffect(() => {
+   //    if (route.params?.deletedTask) {
+   //       // navigation.goBack(route.params); // Silinen task'ı bir üst ekrana ilet
+   //       console.log('TaskScreen - Silinen Task:', route.params.deletedTask);
+   //       navigation.goBack();
+   //    }
+   // }, [route.params?.deletedTask]);
    return (
       <View style={[styles.container, { backgroundColor: taskColor }]}>
          {/* Üst başlık */}
@@ -145,6 +145,7 @@ const TaskScreen = () => {
             visible={settingModalVisible}
             onClose={() => setSettingModalVisible(false)}
             taskName={selectedTaskName}
+            boardId={boardId}
             onBoardDeleted={onBoardDeleted}
          />
       </View>

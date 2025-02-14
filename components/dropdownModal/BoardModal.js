@@ -4,11 +4,13 @@ import { Ionicons } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import colors from '../../constants/colors';
 import BoardBackgroundModal from './BoardBackgroundModal';
+import { useDispatch } from 'react-redux';
 
 const BoardModal = ({ visible, onClose, onCreate }) => {
    const [boardName, setBoardName] = useState('');
    const [selectedColor, setSelectedColor] = useState(colors.blue);
    const [bgModalVisible, setBgModalVisible] = useState(false);
+   const dispatch = useDispatch();
 
    return (
       <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
