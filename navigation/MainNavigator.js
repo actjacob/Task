@@ -12,6 +12,7 @@ import BoardScreen from '../screens/BoardScreen';
 import SearchScreen from '../screens/SearchScreen';
 import Notifications from '../screens/NotificationsScreen';
 import AccountScreen from '../screens/AccountScreen';
+import TaskScreen from '../screens/TaskScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -93,6 +94,13 @@ const MainNavigator = (props) => {
             name="Home"
             component={TabNavigator}
             options={{ headerShown: false }}
+         />
+         <Stack.Screen
+            name="TasksScreen"
+            component={TaskScreen}
+            options={{
+               headerShown: false,
+            }}
          />
          <Stack.Screen
             name="MyCard"
