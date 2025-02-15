@@ -1,6 +1,5 @@
 <table>
   <tr>
-
     <td><img src="assets/screenshot/IMG-20250204-WA0004.jpg" width="200"></td>
     <td><img src="assets/screenshot/IMG-20250204-WA0005.jpg" width="200"></td>
     <td><img src="assets/screenshot/IMG-20250204-WA0006.jpg" width="200"></td>
@@ -16,4 +15,3 @@
     <td></td>
   </tr>
 </table>
-
