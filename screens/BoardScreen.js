@@ -27,6 +27,10 @@ const BoardScreen = (props) => {
    const [assignedBoards, setAssignedBoards] = useState([]);
 
    useEffect(() => {
+      console.log('UserData BoardScreen:', userData); // Kullanıcı verilerini kontrol et
+   }, [userData]);
+
+   useEffect(() => {
       fetchBoards();
       fetchAssignedBoards();
    });
@@ -73,8 +77,13 @@ const BoardScreen = (props) => {
             return;
          }
 
+         const fullName = userData?.firstLast || 'Bilinmeyen Kullanıcı';
+         console.log('Bakalım burda mısın?', fullName);
+
          const boardRef = doc(firestoreDB, 'boards', board.id);
          const staffCardsRef = doc(firestoreDB, 'StaffCards', userEmail); // Her kullanıcı için ayrı bir doküman
+
+         const assignedAt = new Date().toLocaleString();
 
          // Firestore'dan board'u al
          const boardSnap = await getDoc(boardRef);
@@ -92,6 +101,8 @@ const BoardScreen = (props) => {
                color: board.color,
                createAt: board.createAt,
                members: board.members,
+               assignedAt: assignedAt,
+               fullName: fullName,
             },
             { merge: true }
          ); // Mevcut veriye ekleme işlemi

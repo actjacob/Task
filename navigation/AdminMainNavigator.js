@@ -7,13 +7,11 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 import AdminBoardScreen from '../screens/AdminBoardScreen';
-import BoardScreen from '../screens/BoardScreen';
-import MyCardScreen from '../screens/MyCardScreen';
 import SearchScreen from '../screens/SearchScreen';
 import Notifications from '../screens/NotificationsScreen';
 import AccountScreen from '../screens/AccountScreen';
 import TaskScreen from '../screens/TaskScreen';
-import UsersList from '../components/taskManagement/UsersList';
+import StaffCardsScreen from '../screens/StaffCardsForAdminScreen';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -38,20 +36,11 @@ const TabNavigator = (props) => {
             }}
          />
          <Tab.Screen
-            name="Board"
-            component={BoardScreen}
+            name="TaskCard"
+            component={StaffCardsScreen}
             options={{
                headerShown: false,
-               tabBarIcon: ({ color, size }) => {
-                  return <FontAwesome5 name="trello" size={size} color={color} />;
-               },
-            }}
-         />
-         <Tab.Screen
-            name="TaskCard"
-            component={MyCardScreen}
-            options={{
-               tabBarLabel: 'MyCards',
+               tabBarLabel: 'StaffCards',
                tabBarIcon: ({ color, size }) => {
                   return (
                      <MaterialCommunityIcons
