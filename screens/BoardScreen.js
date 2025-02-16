@@ -14,26 +14,26 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import {
-   arrayRemove,
-   arrayUnion,
-   collection,
-   doc,
-   getDocs,
-   updateDoc,
-} from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import { firestoreDB } from '../utils/fireStoreHelper';
 import { useSelector } from 'react-redux';
-// import Swipeable from 'react-native-gesture-handler/Swipeable';
-import 'react-native-gesture-handler';
-import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
+import colors from '../constants/colors';
 
 const BoardScreen = (props) => {
    const navigation = useNavigation();
-   const [menuVisible, setMenuVisible] = useState(false);
    const [boards, setBoards] = useState([]);
    const userData = useSelector((state) => state.auth?.userData);
    const userEmail = userData?.email;
+   const [assignedBoards, setAssignedBoards] = useState([]);
+
+   useEffect(() => {
+      console.log('UserData BoardScreen:', userData); // Kullanıcı verilerini kontrol et
+   }, [userData]);
+
+   useEffect(() => {
+      fetchBoards();
+      fetchAssignedBoards();
+   });
 
    const fetchBoards = async () => {
       try {
@@ -55,35 +55,70 @@ const BoardScreen = (props) => {
       }
    };
 
-   useEffect(() => {
-      fetchBoards();
-   });
+   const fetchAssignedBoards = async () => {
+      if (!userEmail) return;
 
-   const moveToMyCards = async (board) => {
       try {
-         const boardRef = doc(firestoreDB, 'boards', board.id);
-         await updateDoc(boardRef, {
-            members: arrayRemove(userEmail),
-         });
+         const userBoardsRef = doc(firestoreDB, 'StaffCards', userEmail);
+         const userBoardsSnap = await getDoc(userBoardsRef);
 
-         const myCardsRef = doc(firestoreDB, 'myCards', userEmail);
-         await updateDoc(myCardsRef, {
-            tasks: arrayUnion(board.id),
-         });
-
-         Alert.alert('Başarılı', `${board.name} Mycards'a taşındı!`);
-         setBoards((prevBoards) => prevBoards.filter((b) => b.id !== board.id)); // Ekrandan kaldır
+         if (userBoardsSnap.exists()) {
+            setAssignedBoards([userBoardsSnap.data().id]); // Kullanıcının aldığı görevleri kaydet
+         }
       } catch (error) {
-         console.error('İşi MyCards ekranına taşırken hata oluştu', error);
+         console.error('Üstlenilen görevler çekilierken hata oluştu', error);
       }
    };
 
-   const renderRightActions = (board) => (
-      <TouchableOpacity style={styles.acceptButton} onPress={() => moveToMyCards(board)}>
-         <Ionicons name="checkmark-circle" size={32} color="white" />
-         <Text style={styles.acceptText}>Onayla</Text>
-      </TouchableOpacity>
-   );
+   const moveToMyCards = async (board) => {
+      try {
+         if (!userEmail) {
+            Alert.alert('Hata', 'Kullanıcı bilgisi bulunamadı.');
+            return;
+         }
+
+         const fullName = userData?.firstLast || 'Bilinmeyen Kullanıcı';
+         console.log('Bakalım burda mısın?', fullName);
+
+         const boardRef = doc(firestoreDB, 'boards', board.id);
+         const staffCardsRef = doc(firestoreDB, 'StaffCards', userEmail); // Her kullanıcı için ayrı bir doküman
+
+         const assignedAt = new Date().toLocaleString();
+
+         // Firestore'dan board'u al
+         const boardSnap = await getDoc(boardRef);
+         if (!boardSnap.exists()) {
+            Alert.alert('Hata', 'Board bulunamadı.');
+            return;
+         }
+
+         // StaffCards koleksiyonuna onaylayan kullanıcıya ait board verisini ekle
+         await setDoc(
+            staffCardsRef,
+            {
+               id: board.id,
+               name: board.name,
+               color: board.color,
+               createAt: board.createAt,
+               members: board.members,
+               assignedAt: assignedAt,
+               fullName: fullName,
+            },
+            { merge: true }
+         ); // Mevcut veriye ekleme işlemi
+
+         Alert.alert('Başarılı', `"${board.name}" board'ı StaffCards'a eklendi!`);
+
+         setAssignedBoards((prev) => [...prev, board.id]);
+         navigation.jumpTo('TaskCard');
+      } catch (error) {
+         console.error(
+            'Board bilgisi StaffCards koleksiyonuna eklerken hata oluştu',
+            error
+         );
+         Alert.alert('Hata', 'Board ekleme sırasında bir hata oluştu.');
+      }
+   };
 
    return (
       <View style={styles.container}>
@@ -97,8 +132,9 @@ const BoardScreen = (props) => {
          <FlatList
             data={boards}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-               <Swipeable renderRightActions={() => renderRightActions(item)}>
+            renderItem={({ item }) => {
+               const isAssigned = assignedBoards.includes(item.id);
+               return (
                   <TouchableOpacity
                      style={[styles.boardItem, { backgroundColor: item.color }]}
                      onPress={() =>
@@ -106,23 +142,28 @@ const BoardScreen = (props) => {
                            taskName: item.name,
                            taskColor: item.color,
                            boardId: item.id,
-                           onBoardDeleted: (deletedBoardId) => {
-                              setBoards((prevBoards) =>
-                                 prevBoards.filter((board) => board.id !== deletedBoardId)
-                              );
-                           },
                         })
                      }
                   >
                      <Text style={styles.boardText}> {item.name} </Text>
-                     <Ionicons name="chevron-forward" size={24} color="white" />
-                  </TouchableOpacity>
-               </Swipeable>
 
-               // <View style={[styles.boardItem, { backgroundColor: item.color }]}>
-               //    <Text style={styles.boardText}> {item.name} </Text>
-               // </View>
-            )}
+                     <TouchableOpacity
+                        style={[styles.acceptButton, isAssigned && styles.disabledButton]}
+                        onPress={(event) => {
+                           event.stopPropagation(); // BoardItem'e tıklanmasını engellemek için
+                           if (!isAssigned) {
+                              moveToMyCards(item);
+                           }
+                        }}
+                        disabled={isAssigned}
+                     >
+                        <Text style={styles.acceptText}>
+                           {isAssigned ? 'Görev Alındı' : 'Görevi Üstlen'}
+                        </Text>
+                     </TouchableOpacity>
+                  </TouchableOpacity>
+               );
+            }}
          />
       </View>
    );
@@ -138,7 +179,7 @@ const styles = StyleSheet.create({
    header: {
       flexDirection: 'row',
       justifyContent: 'center',
-      backgroundColor: '#0079bf',
+      backgroundColor: colors.midBlue,
       padding: 24,
       width: '100%',
    },
@@ -175,13 +216,19 @@ const styles = StyleSheet.create({
       paddingVertical: 16,
       paddingHorizontal: 16,
    },
-   menuText: {
-      fontSize: 16,
-      color: '#333',
-   },
    acceptButton: {
-      backgroundColor: 'green',
-      justifyContent: 'center',
+      backgroundColor: colors.midBlue,
+      padding: 15,
+      borderRadius: 5,
+   },
+   disabledButton: {
+      backgroundColor: colors.red,
+      padding: 15,
+      marginRight: 10,
+   },
+   acceptText: {
+      color: 'white',
+      fontWeight: 'bold',
    },
 });
 

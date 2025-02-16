@@ -131,7 +131,12 @@ const AdminBoardScreen = (props) => {
                   }
                >
                   <Text style={styles.boardText}> {item.name} </Text>
-                  <Ionicons name="chevron-forward" size={24} color="white" />
+
+                  <Ionicons
+                     name="chevron-forward-circle-sharp"
+                     size={25}
+                     color={colors.white}
+                  />
                </TouchableOpacity>
             )}
          />
@@ -184,7 +189,7 @@ const styles = StyleSheet.create({
    header: {
       flexDirection: 'row',
       justifyContent: 'center',
-      backgroundColor: '#0079bf',
+      backgroundColor: colors.midBlue,
       padding: 24,
       width: '100%',
    },

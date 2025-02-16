@@ -41,6 +41,7 @@ const TabNavigator = (props) => {
             name="TaskCard"
             component={MyCardScreen}
             options={{
+               headerShown: false,
                tabBarLabel: 'MyCards',
                tabBarIcon: ({ color, size }) => {
                   return (
