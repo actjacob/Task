@@ -113,6 +113,10 @@ const BoardMembersModal = ({ visible, onClose, boardId, taskName, ...props }) =>
       await addUserToBoard(user.email);
    };
 
+   const isValidUrl = (url) => {
+      return typeof url === 'string' && url.startsWith('http');
+   };
+
    return (
       <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
          <View style={styles.container}>
@@ -140,8 +144,16 @@ const BoardMembersModal = ({ visible, onClose, boardId, taskName, ...props }) =>
                      style={styles.userContainer}
                      onPress={() => handleAddUserToBoard(item)}
                   >
-                     <Image
+                     {/* <Image
                         source={{ uri: item.profilePicture || userImage }}
+                        style={styles.profileImage}
+                     /> */}
+                     <Image
+                        source={
+                           isValidUrl(item.profilePicture)
+                              ? { uri: item.profilePicture }
+                              : userImage
+                        }
                         style={styles.profileImage}
                      />
 

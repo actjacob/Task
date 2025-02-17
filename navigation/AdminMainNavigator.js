@@ -12,6 +12,7 @@ import Notifications from '../screens/NotificationsScreen';
 import AccountScreen from '../screens/AccountScreen';
 import TaskScreen from '../screens/TaskScreen';
 import StaffCardsScreen from '../screens/StaffCardsForAdminScreen';
+import JoinRequestsScreen from '../screens/JoinRequestsScreen';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -54,9 +55,10 @@ const TabNavigator = (props) => {
             }}
          />
          <Tab.Screen
-            name="Search"
-            component={SearchScreen}
+            name="Requests"
+            component={JoinRequestsScreen}
             options={{
+               headerShown: false,
                tabBarIcon: ({ color, size }) => {
                   return <FontAwesome5 name="search" size={size} color={color} />;
                },
