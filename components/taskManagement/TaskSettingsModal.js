@@ -112,7 +112,6 @@ const TaskSettingsModal = ({
             <View style={styles.boardNameContainer}>
                <Text style={styles.boardNameText}>Board Name </Text>
                <Text style={styles.boardName}>{taskName} </Text>
-               <Text style={styles.boardName}>{boardId} </Text>
             </View>
 
             {/* <TextInput
@@ -202,10 +201,12 @@ const styles = StyleSheet.create({
       paddingHorizontal: 20,
    },
    boardNameText: {
+      marginTop: 10,
       fontSize: 12,
       color: colors.lightGray,
    },
    boardName: {
+      padding: 10,
       fontSize: 24,
       color: colors.midBlue,
    },

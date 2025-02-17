@@ -105,7 +105,7 @@ const TaskScreen = () => {
 
             <TextInput
                style={styles.input}
-               placeholder="enter new task"
+               placeholder="Enter New Task"
                value={newTask}
                onChangeText={(text) => {
                   setNewTask(text);
