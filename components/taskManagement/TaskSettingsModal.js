@@ -20,7 +20,15 @@ import BoardMembersModal from './BoardMembersModal';
 import { useNavigation } from '@react-navigation/native';
 import { db, firestoreDB } from '../../utils/fireStoreHelper';
 // import { doc, deleteDoc } from 'firebase/firestore';
-import { doc, deleteDoc, query, where, getDocs, collection } from 'firebase/firestore';
+import {
+   doc,
+   deleteDoc,
+   query,
+   where,
+   getDocs,
+   collection,
+   getDoc,
+} from 'firebase/firestore';
 
 const TaskSettingsModal = ({
    route,
@@ -40,6 +48,34 @@ const TaskSettingsModal = ({
    const navigation = useNavigation();
    const [editedBoardName, setEditedBoardName] = useState(taskName);
    const [modalVisible, setModalVisible] = useState(false);
+
+   const [boardMembers, setBoardMembers] = useState([]);
+   const [loading, setLoading] = useState(true);
+
+   useEffect(() => {
+      const fetchBoardMembers = async () => {
+         try {
+            const boardRef = doc(firestoreDB, 'boards', boardId);
+            const boardSnap = await getDoc(boardRef);
+
+            if (boardSnap.exists()) {
+               const boardData = boardSnap.data();
+               console.log('Board Verisi:', boardData);
+
+               // Members array'ini state'e ekleyelim
+               setBoardMembers(boardData.members || []);
+            } else {
+               console.log('Board bulunamadı.');
+            }
+         } catch (error) {
+            console.error('Üyeler alınırken bir hata oluştu:', error);
+         } finally {
+            setLoading(false);
+         }
+      };
+
+      fetchBoardMembers();
+   }, [boardId]);
 
    useEffect(() => {
       console.log('TaskSettingsModal açıldı - Gelen boardId:', boardId);
@@ -90,6 +126,10 @@ const TaskSettingsModal = ({
 
    const userName = `${firstName} ${lastName}`.trim();
 
+   const isValidUrl = (url) => {
+      return typeof url === 'string' && url.startsWith('http');
+   };
+
    return (
       <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
          <View style={styles.container}>
@@ -112,7 +152,6 @@ const TaskSettingsModal = ({
             <View style={styles.boardNameContainer}>
                <Text style={styles.boardNameText}>Board Name </Text>
                <Text style={styles.boardName}>{taskName} </Text>
-               <Text style={styles.boardName}>{boardId} </Text>
             </View>
 
             {/* <TextInput
@@ -133,6 +172,7 @@ const TaskSettingsModal = ({
 
                   <Text style={styles.memberMail}> {userEmail} </Text>
                </View>
+
                <TouchableOpacity
                   style={styles.inviteButton}
                   onPress={() => setModalVisible(true)}
@@ -202,15 +242,18 @@ const styles = StyleSheet.create({
       paddingHorizontal: 20,
    },
    boardNameText: {
+      marginTop: 10,
       fontSize: 12,
       color: colors.lightGray,
    },
    boardName: {
+      padding: 10,
       fontSize: 24,
       color: colors.midBlue,
    },
    membersContainer: {
-      marginTop: 50,
+      maxHeight: 450,
+      marginTop: 10,
       backgroundColor: colors.white,
       padding: 20,
    },
@@ -240,6 +283,26 @@ const styles = StyleSheet.create({
    memberMail: {
       fontSize: 18,
       color: colors.gray,
+   },
+   profileMembersContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 4,
+      marginBottom: 2,
+      backgroundColor: '#f9f9f9', // Her öğe için arka plan rengi
+      borderRadius: 8, // Köşe yuvarlama
+      elevation: 2, // Android için gölge efekti
+      shadowColor: '#000', // iOS için gölge rengi
+      shadowOffset: { width: 0, height: 2 }, // Gölge yönü
+      shadowOpacity: 0.1, // Gölge yoğunluğu
+      shadowRadius: 4, // Gölge yayılımı
+   },
+   profileMembersImage: {
+      width: 50,
+      height: 50,
+      borderRadius: 50,
+      borderWidth: 1,
+      borderColor: colors.gray,
    },
    inviteButton: {
       backgroundColor: colors.blue2,
