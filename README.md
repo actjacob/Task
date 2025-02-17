@@ -27,11 +27,11 @@
 ## Demo
 
 <div style="display: flex; flex-direction: 'row';">
-<img src="./assets/demo/auth.mp4" width=30%>
-<img src="./assets/demo/assignedTask.mp4" width=30%>
-<img src="./assets/demo/accountSettings.mp4" width=30%>
-<img src="./assets/demo/createboard.mp4" width=30%>
-<img src="./assets/demo/inviteMembers.mp4" width=30%>
-<img src="./assets/demo/checkStaffWork.mp4" width=30%>
-<img src="./assets/demo/adminAuth.mp4" width=30%>
+<img src="./assets/demoGif/auth.gif" width=30%>
+<img src="./assets/demoGif/assignedTask.gif" width=30%>
+<img src="./assets/demoGif/accountSettings.gif" width=30%>
+<img src="./assets/demoGif/createboard.gif" width=30%>
+<img src="./assets/demoGif/inviteMembers.gif" width=30%>
+<img src="./assets/demoGif/checkStaffWork.gif" width=30%>
+<img src="./assets/demoGif/adminAuth.gif" width=30%>
 </div>
