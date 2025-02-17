@@ -11,7 +11,7 @@ import { ActivityIndicator, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { validateEmail } from '../utils/validationConstraints';
 
-const isTestMode = true;
+const isTestMode = false;
 
 const initialState = {
    inputValues: {

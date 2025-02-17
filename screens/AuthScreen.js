@@ -33,7 +33,7 @@ const AuthScreen = (props) => {
             >
                <PageContainer style={styles.container}>
                   <View style={styles.imageContainer}>
-                     <Image style={styles.image} source={logo} resizeMode="contain" />
+                     <Image style={styles.image} source={logo} resizeMode="center" />
                   </View>
                   {isSignUp ? <SignInForm /> : <SignUpForm />}
                   <TouchableOpacity onPress={toggleForm} style={styles.linkContainer}>
@@ -77,6 +77,8 @@ const styles = StyleSheet.create({
       marginVertical: 15,
    },
    link: {
+      marginTop: 10,
+      fontSize: 15,
       color: colors.nearlyWhite,
       fontWeight: 'medium',
       letterSpacing: 0.3,
