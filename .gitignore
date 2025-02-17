@@ -36,5 +36,5 @@ yarn-error.*
 *.tsbuildinfo
 
 #realtimedatabase
-utils/firebaseHelper.js
+firebaseHelper.js
 utils/firebaseLegacy.js

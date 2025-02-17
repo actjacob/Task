@@ -1,5 +1,5 @@
 import { child, get, getDatabase, ref } from 'firebase/database';
-import { getFirebaseApp } from '../firebaseHelper';
+import { getFirebaseApp } from '../../firebaseHelper';
 import { db } from '../fireStoreHelper';
 import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
 
