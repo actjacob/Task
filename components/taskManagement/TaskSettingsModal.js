@@ -173,33 +173,6 @@ const TaskSettingsModal = ({
                   <Text style={styles.memberMail}> {userEmail} </Text>
                </View>
 
-               {loading ? (
-                  <Text>Loading...</Text>
-               ) : (
-                  // Eğer üyeler yükleniyorsa "Loading..." yazdır
-                  <FlatList
-                     data={boardMembers}
-                     keyExtractor={(item, index) => index.toString()}
-                     renderItem={({ item }) => (
-                        <View style={styles.profileMembersContainer}>
-                           {/* <Image
-                              style={styles.profileMembersImage}
-                              source={{ uri: item.profilePicture || userImage }}
-                           /> */}
-                           <Image
-                              source={
-                                 isValidUrl(item.profilePicture)
-                                    ? { uri: item.profilePicture }
-                                    : userImage
-                              }
-                              style={styles.profileImage}
-                           />
-                           <Text style={styles.memberMail}>{item}</Text>
-                        </View>
-                     )}
-                  />
-               )}
-
                <TouchableOpacity
                   style={styles.inviteButton}
                   onPress={() => setModalVisible(true)}
