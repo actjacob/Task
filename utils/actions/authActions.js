@@ -1,4 +1,4 @@
-import { getFirebaseApp } from '../../firebaseHelper';
+import { getFirebaseApp } from '../../services/firebaseHelper';
 import {
    createUserWithEmailAndPassword,
    getAuth,
