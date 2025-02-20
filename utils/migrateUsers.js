@@ -18,9 +18,9 @@ const migrateUsersToFirestore = async () => {
          await setDoc(userDocRef, user);
       }
 
-      console.log("✅ Kullanıcılar Firestore'a aktarıldı!");
+      console.log("Kullanıcılar Firestore'a aktarıldı!");
    } else {
-      console.log("❌ Realtime Database'de kullanıcı bulunamadı.");
+      console.log("Realtime Database'de kullanıcı bulunamadı.");
    }
 };
 

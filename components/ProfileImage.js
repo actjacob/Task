@@ -14,7 +14,7 @@ import colors from '../constants/colors';
 import { launchImagePicker, uploadImagePicker } from '../utils/ImagePickerHelper';
 import { updateSignedInUserData } from '../utils/actions/authActions';
 import { useDispatch } from 'react-redux';
-import { updateLoggedInUserData } from '../app/store/authSlice';
+import { updateLoggedInUserData } from '../apps/store/authSlice';
 
 const ProfileImage = (props) => {
    const dispatch = useDispatch();
@@ -48,7 +48,7 @@ const ProfileImage = (props) => {
 
          setImage({ uri: uploadUrl });
       } catch (error) {
-         console.log('Selam Buradaki hata:', error);
+         // console.log('Selam Buradaki hata:', error);
          setIsLoading(false);
       }
    };

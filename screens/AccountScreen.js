@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SubmitButton from '../components/SubmitButton';
 import colors from '../constants/colors';
 import { updateSignedInUserData, userLogout } from '../utils/actions/authActions';
-import { updateLoggedInUserData } from '../app/store/authSlice';
+import { updateLoggedInUserData } from '../apps/store/authSlice';
 import ProfileImage from '../components/ProfileImage';
 import userImage from '../assets/userImage.jpeg';
 
@@ -28,7 +28,7 @@ const AccountScreen = (props) => {
    const [isLoading, setIsLoading] = useState(false);
    const [showSuccesMessage, setShowSuccesMessage] = useState(false);
    const userData = useSelector((state) => state.auth?.userData);
-   console.log('User Data:', userData);
+   // console.log('User Data:', userData);
 
    const firstName = userData?.firstName || '';
    const lastName = userData?.lastName || '';
