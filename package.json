@@ -16,7 +16,7 @@
     "@react-navigation/native-stack": "^7.2.0",
     "@reduxjs/toolkit": "^2.5.0",
     "expo": "~52.0.25",
-    "expo-dev-client": "~5.0.12",
+    "expo-build-properties": "~0.13.2",
     "expo-image-picker": "~16.0.4",
     "expo-status-bar": "~2.0.1",
     "firebase": "^11.1.0",
@@ -29,8 +29,7 @@
     "react-native-uuid": "^2.0.3",
     "react-native-vector-icons": "^10.2.0",
     "react-redux": "^9.2.0",
-    "validate.js": "^0.13.1",
-    "expo-build-properties": "~0.13.2"
+    "validate.js": "^0.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

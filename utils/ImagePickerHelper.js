@@ -1,6 +1,6 @@
 import * as ImagePicker from 'expo-image-picker';
 import { Platform } from 'react-native';
-import { getFirebaseApp } from '../services/firebaseHelper';
+import { getFirebaseApp } from '../services/firebaseHelper.js';
 import uuid from 'react-native-uuid';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import react from 'react';
