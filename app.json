@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Task",
-    "slug": "Task",
+    "slug": "taskapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,6 +16,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.yourcompany.task",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -23,6 +24,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-build-properties"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d0763077-321a-4095-b30c-252ae4176a7e"
+      }
+    },
+    "owner": "actjacob"
   }
 }

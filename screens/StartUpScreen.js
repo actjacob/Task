@@ -4,7 +4,7 @@ import colors from '../constants/colors';
 import commonStyles from '../constants/commonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
-import { authenticate, setDidTryAutoLogin } from '../app/store/authSlice';
+import { authenticate, setDidTryAutoLogin } from '../apps/store/authSlice';
 import { getUserData } from '../utils/actions/userActions';
 
 const StartUpScreen = () => {

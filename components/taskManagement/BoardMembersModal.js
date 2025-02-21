@@ -13,7 +13,7 @@ import colors from '../../constants/colors';
 import userImage from '../../assets/userImage.jpeg';
 import { getAllUsers } from '../../utils/actions/userActions';
 import { useSelector, useDispatch } from 'react-redux';
-import { setBoardId } from '../../app/store/boardSlice';
+import { setBoardId } from '../../apps/store/boardSlice';
 import { getFirestore, doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
 
 const BoardMembersModal = ({ visible, onClose, boardId, taskName, ...props }) => {
@@ -26,7 +26,7 @@ const BoardMembersModal = ({ visible, onClose, boardId, taskName, ...props }) =>
 
    useEffect(() => {
       if (boardId && !boardIdFromRedux) {
-         console.log('Prop olarak gelen boardId:', boardId);
+         // console.log('Prop olarak gelen boardId:', boardId);
          dispatch(setBoardId(boardId));
       }
    }, [boardId, boardIdFromRedux, dispatch]);
@@ -77,7 +77,7 @@ const BoardMembersModal = ({ visible, onClose, boardId, taskName, ...props }) =>
          }
 
          if (members.includes(userEmail)) {
-            console.log(`${userEmail} zaten board üyesi.`);
+            // console.log(`${userEmail} zaten board üyesi.`);
             alert(`${userEmail} zaten board üyesi!`);
             return; // Kullanıcı zaten varsa, işlem yapılmaz
          }

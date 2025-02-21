@@ -60,12 +60,12 @@ const TaskSettingsModal = ({
 
             if (boardSnap.exists()) {
                const boardData = boardSnap.data();
-               console.log('Board Verisi:', boardData);
+               // console.log('Board Verisi:', boardData);
 
                // Members array'ini state'e ekleyelim
                setBoardMembers(boardData.members || []);
             } else {
-               console.log('Board bulunamadı.');
+               // console.log('Board bulunamadı.');
             }
          } catch (error) {
             console.error('Üyeler alınırken bir hata oluştu:', error);
@@ -78,7 +78,7 @@ const TaskSettingsModal = ({
    }, [boardId]);
 
    useEffect(() => {
-      console.log('TaskSettingsModal açıldı - Gelen boardId:', boardId);
+      // console.log('TaskSettingsModal açıldı - Gelen boardId:', boardId);
    }, [boardId]);
 
    const capitalizeFirstLetter = (string) => {
@@ -96,7 +96,7 @@ const TaskSettingsModal = ({
          const querySnapshot = await getDocs(q);
 
          if (querySnapshot.empty) {
-            console.log('Board bulunamadı');
+            // console.log('Board bulunamadı');
             return;
          }
 

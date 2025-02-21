@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { updateSignedInUserData } from '../../utils/actions/authActions';
 
 const initialState = {
    token: null,

@@ -1,11 +1,11 @@
-import { getFirebaseApp } from '../../services/firebaseHelper';
+import { getFirebaseApp } from '../../services/firebaseHelper.js';
 import {
    createUserWithEmailAndPassword,
    getAuth,
    signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { child, getDatabase, ref, set, update } from 'firebase/database';
-import { authenticate, logout } from '../../app/store/authSlice';
+import { authenticate, logout } from '../../apps/store/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUserData } from './userActions';
 
@@ -94,6 +94,7 @@ export const signIn = (email, password) => {
 
 export const userLogout = () => {
    return async (dispatch) => {
+      const { logout } = require('../../apps/store/authSlice');
       AsyncStorage.clear();
       clearTimeout(timer);
       dispatch(logout());

@@ -78,7 +78,7 @@ const BoardScreen = (props) => {
          }
 
          const fullName = userData?.firstLast || 'Bilinmeyen Kullanıcı';
-         console.log('Bakalım burda mısın?', fullName);
+         console.log('User full name:', fullName);
 
          const boardRef = doc(firestoreDB, 'boards', board.id);
          const staffCardsRef = doc(firestoreDB, 'StaffCards', userEmail); // Her kullanıcı için ayrı bir doküman

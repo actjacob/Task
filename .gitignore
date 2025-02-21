@@ -30,11 +30,11 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
 .env*.local
 
 # typescript
 *.tsbuildinfo
 
-#realtimedatabase
-firebaseHelper.js
-utils/firebaseLegacy.js
+
+

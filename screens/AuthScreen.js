@@ -15,7 +15,7 @@ import PageContainer from '../components/PageContainer';
 import SignUpForm from '../components/SignUpForm';
 import SignInForm from '../components/SignInForm';
 
-import logo from '../assets/login/task.png';
+import logo from '../assets/task.jpg';
 
 const AuthScreen = (props) => {
    const [isSignUp, setIsSignUp] = useState(true);
